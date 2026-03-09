@@ -1,4 +1,9 @@
 # Ignore known false-positive / accepted-risk CVEs for this project
 # Add CVE IDs below to suppress them in Trivy image scan results
 
-# Example: CVE-2025-XXXX
+# Spring Security vulnerabilities - tracking for update
+# CVE-2025-41232  # CRITICAL - Spring Security authorization bypass (needs 6.4.6)
+# CVE-2025-41248  # HIGH - Spring Security authorization bypass (needs 6.4.10/6.5.4)
+# CVE-2025-22228  # HIGH - BCryptPasswordEncoder max length issue
+# CVE-2025-41249  # HIGH - Spring Framework annotation detection
+# CVE-2025-22235  # HIGH - Spring Boot EndpointRequest matcher issue

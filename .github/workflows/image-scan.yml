@@ -25,4 +25,5 @@ jobs:
           image-ref: ${{ vars.DOCKERHUB_USER }}/bankapp:${{ github.sha }}
           severity: 'CRITICAL,HIGH'
           exit-code: '1'
-          trivyignore: ${{ github.workspace }}/.trivyignore
+          trivyignores: .trivyignore
+          trivy-config: trivy.yaml
