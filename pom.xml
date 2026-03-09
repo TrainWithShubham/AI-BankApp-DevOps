@@ -117,6 +117,8 @@
 				<version>11.1.1</version>
 				<configuration>
 					<failBuildOnCVSS>7</failBuildOnCVSS>
+					<nvdApiDelay>6000</nvdApiDelay>
+					<hostedSuppressionsEnabled>false</hostedSuppressionsEnabled>
 				</configuration>
 			</plugin>
 		</plugins>
