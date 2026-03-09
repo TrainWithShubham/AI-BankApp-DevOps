@@ -30,7 +30,7 @@ jobs:
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
-          mvn dependency-check:check \
+          mvn org.owasp:dependency-check-maven:11.1.1:check \
             -DnvdApiKey="${NVD_API_KEY}" \
             -DfailBuildOnCVSS=7 || true
 
