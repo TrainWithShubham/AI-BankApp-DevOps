@@ -16,6 +16,6 @@ USER devsecops
 
 COPY --from=build /app/target/*.jar app.jar 
 
-EXPOSE 8080
+EXPOSE 80
 
 ENTRYPOINT [ "Java","-jar","app.jar" ]
