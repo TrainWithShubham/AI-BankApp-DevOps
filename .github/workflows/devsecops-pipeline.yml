@@ -2,6 +2,13 @@ name: DevSecOps end-to-end pipeline
 
 on:
   workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  #     - devsecops
+  # pull_request:
+  #   branches:
+  #     - main
 
 
 jobs:
