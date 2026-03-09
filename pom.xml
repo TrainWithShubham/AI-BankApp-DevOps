@@ -111,7 +111,6 @@
 			</plugin>
 
 			<!-- Dependency Check: OWASP -->
-			<!-- nvdApiKey is passed via CLI: -DnvdApiKey=... so no hardcoded key here -->
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
