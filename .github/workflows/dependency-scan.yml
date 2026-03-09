@@ -24,5 +24,3 @@ jobs:
 
       - name: Run OWASP Dependency-Check
         run: mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7 -DnvdApiKey=${{ secrets.NVD_API_KEY }}
-        env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
