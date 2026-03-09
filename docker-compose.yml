@@ -3,8 +3,10 @@ services:
     image: mysql:8.0
     container_name: bankapp-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: Test@123
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: bankappdb
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -29,7 +31,7 @@ services:
       - bankapp-net
 
   bankapp:
-    build: .
+    image: ${DOCKERHUB_USER}/bankapp:${DOCKER_TAG:-latest}
     container_name: bankapp
     ports:
       - "8080:8080"
@@ -37,8 +39,8 @@ services:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
       MYSQL_DATABASE: bankappdb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: Test@123
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
       OLLAMA_URL: http://ollama:11434
     depends_on:
       mysql:

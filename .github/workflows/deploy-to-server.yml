@@ -1,0 +1,55 @@
+# Deploy the safe / secure / tested image to prod server
+name: Deploy to Server
+
+on:
+  workflow_call:
+
+
+jobs:
+
+  deploy:
+
+    env:
+      DOCKERHUB_USER: ${{ vars.DOCKERHUB_USER }}
+      DOCKER_TAG: ${{ github.sha }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: SSH to prod server — install Docker
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_SSH_HOST }}
+          username: ${{ secrets.EC2_SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            sudo apt-get update && sudo apt-get install -y docker.io docker-compose-v2
+            sudo usermod -aG docker $USER
+            mkdir -p ~/devops
+
+      - name: Copy docker-compose file to server
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.EC2_SSH_HOST }}
+          username: ${{ secrets.EC2_SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          source: docker-compose.yml
+          target: ~/devops
+
+      - name: SSH to prod server — run the app
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_SSH_HOST }}
+          username: ${{ secrets.EC2_SSH_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            export DOCKERHUB_USER=${{ vars.DOCKERHUB_USER }}
+            export DOCKER_TAG=${{ github.sha }}
+            export DB_USERNAME=${{ secrets.DB_USERNAME }}
+            export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            export DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}
+            echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ vars.DOCKERHUB_USER }} --password-stdin
+            cd ~/devops && docker compose down && docker compose pull && docker compose up -d --force-recreate

@@ -1,0 +1,4 @@
+# Ignore known false-positive / accepted-risk CVEs for this project
+# Add CVE IDs below to suppress them in Trivy image scan results
+
+# Example: CVE-2025-XXXX

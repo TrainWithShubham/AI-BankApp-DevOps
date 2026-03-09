@@ -1,0 +1,46 @@
+name: DevSecOps end-to-end pipeline
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+
+  # ── CI Security Scans ────────────────────────────────────────────
+
+  code-quality:
+    uses: ./.github/workflows/code-quality.yml
+
+  secrets-scan:
+    uses: ./.github/workflows/secrets-scan.yml
+    secrets: inherit
+
+  dependency-scan:
+    uses: ./.github/workflows/dependency-scan.yml
+
+  docker-scan:
+    uses: ./.github/workflows/docker-lint.yml
+
+
+  # ── Build — only after all scans pass ───────────────────────────
+
+  build:
+    needs: [code-quality, secrets-scan, dependency-scan, docker-scan]
+    uses: ./.github/workflows/docker-build-push.yml
+    secrets: inherit
+
+
+  # ── Image scan — scan the freshly built image with Trivy ─────────
+
+  trivy:
+    needs: [build]
+    uses: ./.github/workflows/image-scan.yml
+    secrets: inherit
+
+
+  # ── Deploy — to prod server only after image is verified clean ───
+
+  deploy:
+    needs: [trivy]
+    uses: ./.github/workflows/deploy-to-server.yml
+    secrets: inherit

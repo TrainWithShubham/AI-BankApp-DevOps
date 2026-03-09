@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!-- Head fragment -->
 <head th:fragment="head(title)">
@@ -30,7 +31,7 @@
 <nav th:fragment="navbar-auth" class="navbar navbar-expand-lg navbar-app">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <i class="bi bi-bank2"></i> BankApp
+            <i class="bi bi-shield-lock-fill brand-shield"></i> BankApp
         </a>
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
             <i class="bi bi-list" style="font-size:1.5rem; color:var(--text-primary)"></i>
@@ -45,6 +46,10 @@
                 </li>
             </ul>
             <div class="d-flex align-items-center gap-2">
+                <span class="nav-user" sec:authorize="isAuthenticated()">
+                    <i class="bi bi-person-circle"></i>
+                    <span sec:authentication="name">User</span>
+                </span>
                 <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <i id="themeIcon" class="bi bi-sun-fill"></i>
                 </button>
@@ -60,7 +65,13 @@
 
 <!-- Footer fragment -->
 <footer th:fragment="footer" class="footer-app">
-    <p class="mb-0">&copy; 2026 BankApp. Built with Spring Boot.</p>
+    <div class="footer-inner">
+        <span>&copy; 2026 BankApp &mdash; Built with Spring Boot</span>
+        <span class="footer-badges">
+            <span class="footer-badge badge-security"><i class="bi bi-shield-check"></i> Spring Security</span>
+            <span class="footer-badge badge-pipeline"><i class="bi bi-infinity"></i> DevSecOps</span>
+        </span>
+    </div>
 </footer>
 
 </html>

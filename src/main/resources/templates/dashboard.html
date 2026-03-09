@@ -17,6 +17,12 @@
                 <span><i class="bi bi-hash"></i> Account #<span th:text="${account.id}">1</span></span>
                 <span><i class="bi bi-wallet2"></i> Savings</span>
             </div>
+            <div class="balance-actions mt-3">
+                <span class="status-badge"><span class="status-dot"></span> Active</span>
+                <a th:href="@{/transactions}" class="btn btn-glass btn-sm">
+                    <i class="bi bi-clock-history"></i> View Transactions
+                </a>
+            </div>
         </div>
 
         <!-- Error Message -->
