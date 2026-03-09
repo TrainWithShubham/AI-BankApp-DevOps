@@ -6,7 +6,6 @@ name: Dependency scan
 on:
   workflow_call:
 
-
 jobs:
   dependency-check:
     runs-on: ubuntu-latest
@@ -22,7 +21,16 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run OWASP Dependency-Check
-        run: mvn dependency-check:check
+      - name: Debug NVD API Key
+        run: |
+          echo "Key length: ${#NVD_API_KEY}"
+          if [ -z "$NVD_API_KEY" ]; then
+            echo "WARNING: NVD_API_KEY is empty or not set!"
+          else
+            echo "NVD_API_KEY is set correctly."
+          fi
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+
+      - name: Run OWASP Dependency-Check
+        run: mvn dependency-check:check -DnvdApiKey=${{ secrets.NVD_API_KEY }}

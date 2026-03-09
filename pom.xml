@@ -62,7 +62,6 @@
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
@@ -112,12 +111,12 @@
 			</plugin>
 
 			<!-- Dependency Check: OWASP -->
+			<!-- nvdApiKey is passed via CLI: -DnvdApiKey=... so no hardcoded key here -->
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
 				<version>10.0.4</version>
 				<configuration>
-					<nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
 					<failBuildOnCVSS>7</failBuildOnCVSS>
 				</configuration>
 			</plugin>
