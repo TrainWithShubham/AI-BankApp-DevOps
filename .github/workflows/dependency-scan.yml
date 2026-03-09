@@ -1,6 +1,3 @@
-# Scan Maven dependencies for known CVEs
-# Uses OWASP Dependency-Check (Java equivalent of pip-audit)
-
 name: Dependency scan
 
 on:
@@ -21,5 +18,25 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Cache OWASP NVD Database
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: owasp-nvd-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            owasp-nvd-${{ runner.os }}-
+
       - name: Run OWASP Dependency-Check
-        run: mvn dependency-check:check -DnvdApiKey=${{ secrets.NVD_API_KEY }} || true
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        run: |
+          mvn dependency-check:check \
+            -DnvdApiKey="${NVD_API_KEY}" \
+            -DfailBuildOnCVSS=7 || true
+
+      - name: Upload Dependency Check Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: owasp-dependency-check-report
+          path: target/dependency-check-report.html
