@@ -46,10 +46,15 @@ jobs:
           username: ${{ secrets.EC2_SSH_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            export DOCKERHUB_USER=${{ vars.DOCKERHUB_USER }}
-            export DOCKER_TAG=${{ github.sha }}
-            export DB_USERNAME=${{ secrets.DB_USERNAME }}
-            export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            export DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}
+            cd ~/devops
+            cat > .env << 'EOF'
+            DOCKERHUB_USER=${{ vars.DOCKERHUB_USER }}
+            DOCKER_TAG=${{ github.sha }}
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}
+            EOF
             echo ${{ secrets.DOCKERHUB_TOKEN }} | sudo docker login --username ${{ vars.DOCKERHUB_USER }} --password-stdin
-            cd ~/devops && sudo -E docker compose down && sudo -E docker compose pull && sudo -E docker compose up -d --force-recreate
+            sudo docker compose down
+            sudo docker compose pull
+            sudo docker compose up -d --force-recreate
