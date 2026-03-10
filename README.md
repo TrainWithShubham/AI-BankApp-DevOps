@@ -59,6 +59,12 @@ A modern, secure banking application built with Spring Boot 3.4, featuring a com
 git clone https://github.com/yourusername/AI-BankApp-DevOps.git
 cd AI-BankApp-DevOps
 
+# Create .env file from example
+cp .env.example .env
+
+# Edit .env with your credentials
+nano .env
+
 # Start all services (MySQL + BankApp)
 docker compose up -d
 
