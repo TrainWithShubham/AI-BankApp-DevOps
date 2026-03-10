@@ -58,3 +58,7 @@ jobs:
             sudo docker compose down
             sudo docker compose pull
             sudo docker compose up -d --force-recreate
+            
+            # Clean up old images (keep only current + previous version)
+            sudo docker images nandan56/bankapp --format "{{.ID}}" | tail -n +3 | xargs -r sudo docker rmi -f || true
+            echo "✅ Cleaned up old Docker images"
