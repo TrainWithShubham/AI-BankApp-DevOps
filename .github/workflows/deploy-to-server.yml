@@ -51,5 +51,5 @@ jobs:
             export DB_USERNAME=${{ secrets.DB_USERNAME }}
             export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             export DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}
-            echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ vars.DOCKERHUB_USER }} --password-stdin
-            cd ~/devops && docker compose down && docker compose pull && docker compose up -d --force-recreate
+            echo ${{ secrets.DOCKERHUB_TOKEN }} | sudo docker login --username ${{ vars.DOCKERHUB_USER }} --password-stdin
+            cd ~/devops && sudo -E docker compose down && sudo -E docker compose pull && sudo -E docker compose up -d --force-recreate
