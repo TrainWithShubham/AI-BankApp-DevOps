@@ -6,21 +6,59 @@
     <nav th:replace="~{fragments/layout :: navbar-auth}"></nav>
 
     <div class="dashboard-wrapper fade-in">
+        <!-- Quick Stats Row -->
+        <div class="stats-grid mb-4">
+            <div class="stat-card glass-card fade-in">
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--success);">
+                    <i class="bi bi-wallet2"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Total Balance</div>
+                    <div class="stat-value">$<span th:text="${#numbers.formatDecimal(account.balance, 1, 2)}">0.00</span></div>
+                </div>
+            </div>
+
+            <div class="stat-card glass-card fade-in fade-in-delay-1">
+                <div class="stat-icon" style="background: rgba(99, 102, 241, 0.15); color: var(--accent);">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Account</div>
+                    <div class="stat-value" style="font-size: 1.5rem;" th:text="${account.username}">user</div>
+                </div>
+            </div>
+
+            <div class="stat-card glass-card fade-in fade-in-delay-2">
+                <div class="stat-icon" style="background: rgba(6, 182, 212, 0.15); color: var(--info);">
+                    <i class="bi bi-hash"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Account ID</div>
+                    <div class="stat-value" style="font-size: 1.5rem;">#<span th:text="${account.id}">1</span></div>
+                </div>
+            </div>
+
+            <div class="stat-card glass-card fade-in fade-in-delay-3">
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--success);">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Status</div>
+                    <div class="stat-value" style="font-size: 1.5rem; color: var(--success);">Active</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Balance Card -->
         <div class="glass-card balance-card fade-in">
-            <div class="balance-label">Total Balance</div>
+            <div class="balance-label">Available Balance</div>
             <div class="balance-amount">
                 <span class="currency">$</span><span th:text="${#numbers.formatDecimal(account.balance, 1, 2)}">0.00</span>
             </div>
-            <div class="account-info">
-                <span><i class="bi bi-person-circle"></i> <span th:text="${account.username}">user</span></span>
-                <span><i class="bi bi-hash"></i> Account #<span th:text="${account.id}">1</span></span>
-                <span><i class="bi bi-wallet2"></i> Savings</span>
-            </div>
             <div class="balance-actions mt-3">
-                <span class="status-badge"><span class="status-dot"></span> Active</span>
+                <span class="status-badge"><span class="status-dot"></span> Account Active</span>
                 <a th:href="@{/transactions}" class="btn btn-glass btn-sm">
-                    <i class="bi bi-clock-history"></i> View Transactions
+                    <i class="bi bi-clock-history"></i> View History
                 </a>
             </div>
         </div>

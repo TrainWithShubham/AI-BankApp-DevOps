@@ -362,9 +362,61 @@ a:hover {
     margin: 0 auto;
 }
 
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+}
+
+.stat-card {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all var(--transition-speed);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px) scale(1.02);
+}
+
+.stat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.stat-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .balance-card {
     text-align: center;
-    padding: 3rem 2rem;
+    padding: 2.5rem 2rem;
     margin-bottom: 2rem;
     border-top: 2px solid transparent;
     background: var(--glass-bg);
@@ -384,6 +436,18 @@ a:hover {
     height: 2px;
     background: var(--gradient-accent);
     animation: shimmer 3s ease-in-out infinite;
+}
+
+.balance-card::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 @keyframes shimmer {
@@ -469,15 +533,33 @@ a:hover {
 }
 
 .action-card {
-    padding: 1.5rem;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.action-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 .action-card h5 {
-    font-weight: 600;
-    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
+}
+
+.action-card h5 i {
+    font-size: 1.3rem;
 }
 
 .action-card .form-control {
@@ -502,7 +584,7 @@ a:hover {
 /* ===== Transactions Table ===== */
 .transactions-wrapper {
     padding: 2rem 1rem;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
@@ -515,65 +597,108 @@ a:hover {
 .table-glass thead th {
     background: var(--bg-surface);
     color: var(--text-muted);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 1rem;
-    border-bottom: 1px solid var(--border-color);
+    letter-spacing: 0.08em;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 2px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .table-glass tbody td {
-    padding: 1rem;
+    padding: 1.25rem 1.5rem;
     border-bottom: 1px solid var(--border-color);
     color: var(--text-primary);
     vertical-align: middle;
+    font-size: 0.95rem;
 }
 
 .table-glass tbody tr {
-    transition: background var(--transition-speed);
+    transition: all var(--transition-speed);
 }
 
 .table-glass tbody tr:hover {
     background: var(--bg-surface);
+    transform: scale(1.01);
+}
+
+.table-glass tbody tr:last-child td {
+    border-bottom: none;
 }
 
 .amount-positive {
     color: var(--success);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.05rem;
 }
 
 .amount-negative {
     color: var(--danger);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.05rem;
 }
 
 .badge-type {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.85rem;
     border-radius: 999px;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.badge-type::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
 }
 
 .badge-deposit {
-    background: rgba(34, 197, 94, 0.15);
+    background: rgba(16, 185, 129, 0.15);
     color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-deposit::before {
+    background: var(--success);
 }
 
 .badge-withdrawal {
     background: rgba(239, 68, 68, 0.15);
     color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-withdrawal::before {
+    background: var(--danger);
 }
 
 .badge-transfer-out {
     background: rgba(239, 68, 68, 0.15);
     color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-transfer-out::before {
+    background: var(--danger);
 }
 
 .badge-transfer-in {
-    background: rgba(34, 197, 94, 0.15);
+    background: rgba(16, 185, 129, 0.15);
     color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-transfer-in::before {
+    background: var(--success);
 }
 
 .empty-state {
@@ -822,13 +947,12 @@ a:hover {
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
-    .balance-amount {
-        font-size: 2.25rem;
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .account-info {
-        flex-direction: column;
-        gap: 0.5rem;
+    .balance-amount {
+        font-size: 2.5rem;
     }
 
     .action-cards {
@@ -841,17 +965,39 @@ a:hover {
 
     .table-glass thead th,
     .table-glass tbody td {
-        padding: 0.75rem 0.5rem;
+        padding: 0.875rem 1rem;
         font-size: 0.875rem;
+    }
+
+    .stat-card {
+        padding: 1.25rem;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
     }
 }
 
 @media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
     .balance-amount {
-        font-size: 1.75rem;
+        font-size: 2rem;
     }
 
     .auth-card {
         padding: 1.5rem;
+    }
+
+    .stat-value {
+        font-size: 1.35rem;
     }
 }
