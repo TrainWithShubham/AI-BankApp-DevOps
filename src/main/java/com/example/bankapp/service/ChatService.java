@@ -38,31 +38,16 @@ public class ChatService {
         Account freshAccount = accountService.getAccountById(account.getId())
             .orElse(account); // Fallback to passed account if not found
         
-        // Get chat history
-        List<ChatMessage> history = chatMessageRepository.findByAccountIdOrderByTimestampAsc(account.getId());
-        
         List<Transaction> recent = accountService.getTransactionHistory(freshAccount);
-        String context = buildContext(freshAccount, recent);  // ⭐ Use fresh account
-
-        // Build messages with history (last 4 messages only for tinyllama's 2048 token limit)
-        List<Map<String, String>> messages = new java.util.ArrayList<>();
-        messages.add(Map.of("role", "system", "content", context));
-        
-        // Add recent history (reduced from 10 to 4 to prevent token limit issues)
-        int startIdx = Math.max(0, history.size() - 4);
-        for (int i = startIdx; i < history.size(); i++) {
-            ChatMessage msg = history.get(i);
-            messages.add(Map.of("role", msg.getRole(), "content", msg.getMessage()));
-        }
+        String context = buildContext(freshAccount, recent);
 
         Map<String, Object> request = Map.of(
             "model", model,
-            "messages", messages,
-            "stream", false,
-            "options", Map.of(
-                "temperature", 0.1,  // Low temperature = more factual, less creative
-                "top_p", 0.9
-            )
+            "messages", List.of(
+                Map.of("role", "system", "content", context),
+                Map.of("role", "user", "content", userMessage)
+            ),
+            "stream", false
         );
 
         try {
@@ -90,29 +75,24 @@ public class ChatService {
 
     private String buildContext(Account account, List<Transaction> transactions) {
         StringBuilder sb = new StringBuilder();
-        sb.append("STRICT RULES:\n");
-        sb.append("1. ONLY answer using the exact data below\n");
-        sb.append("2. DO NOT invent names, dates, or amounts\n");
-        sb.append("3. If asked about transactions, ONLY mention the ones listed\n");
-        sb.append("4. Keep answers under 2 sentences\n\n");
-        
-        sb.append("ACCOUNT DATA:\n");
-        sb.append("Username: ").append(account.getUsername()).append("\n");
-        sb.append("Current Balance: $").append(account.getBalance()).append("\n\n");
+        sb.append("You are a helpful banking assistant for BankApp. ");
+        sb.append("Keep answers short and friendly (2-3 sentences max). ");
+        sb.append("\n\nCustomer details:");
+        sb.append("\n- Username: ").append(account.getUsername());
+        sb.append("\n- Balance: $").append(account.getBalance());
+        sb.append("\n- Account ID: ").append(account.getId());
 
         if (!transactions.isEmpty()) {
-            sb.append("TRANSACTION HISTORY:\n");
-            int limit = Math.min(transactions.size(), 3);
+            sb.append("\n\nRecent transactions:");
+            int limit = Math.min(transactions.size(), 5);
             for (int i = 0; i < limit; i++) {
                 Transaction t = transactions.get(i);
-                sb.append((i+1)).append(". ")
-                  .append(t.getType())
-                  .append(" of $").append(t.getAmount())
-                  .append(" on ").append(t.getTimestamp().toLocalDate())
-                  .append("\n");
+                sb.append("\n- ").append(t.getType())
+                  .append(": $").append(t.getAmount())
+                  .append(" on ").append(t.getTimestamp().toLocalDate());
             }
         } else {
-            sb.append("TRANSACTION HISTORY: None\n");
+            sb.append("\n\nNo transactions yet.");
         }
 
         return sb.toString();
