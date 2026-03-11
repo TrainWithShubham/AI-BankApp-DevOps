@@ -1,0 +1,22 @@
+name: Code Quality
+on:
+  push:
+    branches:
+     - main
+jobs:
+  validate:
+   runs-on: ubuntu-latest
+   steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribition: 'temurin'
+        java-version: '17'
+    - name: build with Meven
+      run: mvn clean install -DskipTests
+    - name: Run Tests
+      run: mvn test
+    
+        
