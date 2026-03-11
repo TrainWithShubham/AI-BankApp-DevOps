@@ -29,11 +29,15 @@ jobs:
   docker-scan:
     uses: ./.github/workflows/docker-lint.yml
 
+  sast-scan:
+    uses: ./.github/workflows/sast-scan.yml
+    secrets: inherit
+
 
   # ── Build — only after all scans pass ───────────────────────────
 
   build:
-    needs: [code-quality, secrets-scan, dependency-scan, docker-scan]
+    needs: [code-quality, secrets-scan, dependency-scan, docker-scan, sast-scan]
     uses: ./.github/workflows/docker-build-push.yml
     secrets: inherit
 
@@ -51,4 +55,11 @@ jobs:
   deploy:
     needs: [trivy]
     uses: ./.github/workflows/deploy-to-server.yml
+    secrets: inherit
+
+  # ── DAST — scan the live application after deployment ────────────
+
+  dast-scan:
+    needs: [deploy]
+    uses: ./.github/workflows/dast-scan.yml
     secrets: inherit

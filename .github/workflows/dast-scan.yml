@@ -1,0 +1,37 @@
+name: DAST - Dynamic Security Scan
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  dast:
+    name: DAST - OWASP ZAP
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Wait for Application Warmup
+        run: |
+          echo "Waiting for application to be fully ready..."
+          sleep 15
+
+      - name: Run OWASP ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: 'http://${{ secrets.EC2_SSH_HOST }}:8080'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
+          fail_action: false
+          allow_issue_writing: false
+
+      - name: Upload ZAP Scan Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-dast-report
+          path: report_html.html
+          retention-days: 30

@@ -62,3 +62,11 @@ jobs:
             # Clean up old images (keep only current + previous version)
             sudo docker images nandan56/bankapp --format "{{.ID}}" | tail -n +3 | xargs -r sudo docker rmi -f || true
             echo "✅ Cleaned up old Docker images"
+
+      - name: Wait for application to be ready
+        run: |
+          echo "Waiting for application to start..."
+          sleep 30
+          curl -f http://${{ secrets.EC2_SSH_HOST }}:8080/actuator/health || exit 1
+          echo "✅ Application is healthy!"
+
