@@ -25,6 +25,9 @@ target/
 ### Trivy ###
 .trivyignore
 
+### ZAP ###
+.zap
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

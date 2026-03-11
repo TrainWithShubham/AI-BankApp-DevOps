@@ -105,6 +105,33 @@
         || document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1] || '';
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.content || 'X-CSRF-TOKEN';
 
+    // Load chat history on page load
+    function loadChatHistory() {
+        fetch('/api/chat/history', {
+            method: 'GET',
+            headers: {
+                [csrfHeader]: csrfToken
+            }
+        })
+        .then(r => r.json())
+        .then(history => {
+            const messages = document.getElementById('chatMessages');
+            messages.innerHTML = '<div class="chat-msg bot">Hi! I\'m your banking assistant. Ask me about your balance, transactions, or anything else.</div>';
+            
+            history.forEach(msg => {
+                const className = msg.role === 'user' ? 'user' : 'bot';
+                messages.innerHTML += '<div class="chat-msg ' + className + '">' + escapeHtml(msg.message) + '</div>';
+            });
+            messages.scrollTop = messages.scrollHeight;
+        })
+        .catch(() => {
+            console.log('No chat history available');
+        });
+    }
+
+    // Load history when page loads
+    window.addEventListener('DOMContentLoaded', loadChatHistory);
+
     document.getElementById('chatFab').addEventListener('click', function () {
         document.getElementById('chatPanel').classList.toggle('open');
         document.getElementById('chatInput').focus();

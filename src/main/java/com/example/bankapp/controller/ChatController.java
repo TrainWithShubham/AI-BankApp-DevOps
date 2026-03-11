@@ -1,10 +1,12 @@
 package com.example.bankapp.controller;
 
 import com.example.bankapp.model.Account;
+import com.example.bankapp.model.ChatMessage;
 import com.example.bankapp.service.ChatService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,5 +25,10 @@ public class ChatController {
         String message = request.getOrDefault("message", "");
         String reply = chatService.chat(account, message);
         return Map.of("reply", reply);
+    }
+    
+    @GetMapping("/chat/history")
+    public List<ChatMessage> getChatHistory(@AuthenticationPrincipal Account account) {
+        return chatService.getChatHistory(account);
     }
 }

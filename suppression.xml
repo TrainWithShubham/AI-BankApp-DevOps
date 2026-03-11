@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+    <!-- 
+        OWASP Dependency Check Suppression File
+        Add CVE suppressions here with justification
+        Example:
+        <suppress>
+           <notes><![CDATA[
+           False positive - this vulnerability doesn't apply to our usage
+           ]]></notes>
+           <cve>CVE-2023-XXXXX</cve>
+        </suppress>
+    -->
+</suppressions>
