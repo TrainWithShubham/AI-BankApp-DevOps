@@ -89,6 +89,9 @@
 <div class="chat-panel" id="chatPanel">
     <div class="chat-header">
         <i class="bi bi-robot"></i> AI Assistant
+        <button id="clearChat" style="margin-left: auto; background: none; border: none; color: white; cursor: pointer; font-size: 0.9rem;" title="Clear chat history">
+            <i class="bi bi-trash"></i>
+        </button>
     </div>
     <div class="chat-messages" id="chatMessages">
         <div class="chat-msg bot">Hi! I'm your banking assistant. Ask me about your balance, transactions, or anything else.</div>
@@ -175,6 +178,25 @@
     }
 
     document.getElementById('chatSend').addEventListener('click', sendMessage);
+
+    document.getElementById('clearChat').addEventListener('click', function() {
+        if (confirm('Clear all chat history? This cannot be undone.')) {
+            fetch('/api/chat/history', {
+                method: 'DELETE',
+                headers: {
+                    [csrfHeader]: csrfToken
+                }
+            })
+            .then(r => r.json())
+            .then(() => {
+                const messages = document.getElementById('chatMessages');
+                messages.innerHTML = '<div class="chat-msg bot">Chat history cleared. How can I help you?</div>';
+            })
+            .catch(() => {
+                alert('Failed to clear chat history');
+            });
+        }
+    });
     document.getElementById('chatInput').addEventListener('keydown', function (e) {
         if (e.key === 'Enter') sendMessage();
     });

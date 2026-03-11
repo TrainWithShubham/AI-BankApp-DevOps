@@ -44,12 +44,12 @@ public class ChatService {
         List<Transaction> recent = accountService.getTransactionHistory(freshAccount);
         String context = buildContext(freshAccount, recent);  // ⭐ Use fresh account
 
-        // Build messages with history (last 10 messages)
+        // Build messages with history (last 4 messages only for tinyllama's 2048 token limit)
         List<Map<String, String>> messages = new java.util.ArrayList<>();
         messages.add(Map.of("role", "system", "content", context));
         
-        // Add recent history
-        int startIdx = Math.max(0, history.size() - 10);
+        // Add recent history (reduced from 10 to 4 to prevent token limit issues)
+        int startIdx = Math.max(0, history.size() - 4);
         for (int i = startIdx; i < history.size(); i++) {
             ChatMessage msg = history.get(i);
             messages.add(Map.of("role", msg.getRole(), "content", msg.getMessage()));
@@ -86,26 +86,26 @@ public class ChatService {
 
     private String buildContext(Account account, List<Transaction> transactions) {
         StringBuilder sb = new StringBuilder();
-        sb.append("You are a helpful banking assistant for BankApp. ");
-        sb.append("Keep answers short and friendly (2-3 sentences max). ");
-        sb.append("\n\nCustomer details:");
-        sb.append("\n- Username: ").append(account.getUsername());
-        sb.append("\n- Balance: $").append(account.getBalance());
-        sb.append("\n- Account ID: ").append(account.getId());
+        sb.append("You are a helpful banking assistant. ");
+        sb.append("Answer in 1-2 sentences. ");
+        sb.append("Current balance: $").append(account.getBalance());
 
         if (!transactions.isEmpty()) {
-            sb.append("\n\nRecent transactions:");
-            int limit = Math.min(transactions.size(), 5);
+            sb.append(". Recent: ");
+            int limit = Math.min(transactions.size(), 3);
             for (int i = 0; i < limit; i++) {
                 Transaction t = transactions.get(i);
-                sb.append("\n- ").append(t.getType())
-                  .append(": $").append(t.getAmount())
-                  .append(" on ").append(t.getTimestamp().toLocalDate());
+                sb.append(t.getType()).append(" $").append(t.getAmount());
+                if (i < limit - 1) sb.append(", ");
             }
-        } else {
-            sb.append("\n\nNo transactions yet.");
         }
 
         return sb.toString();
     }
+
+
+    public void clearChatHistory(Account account) {
+        chatMessageRepository.deleteByAccountId(account.getId());
+    }
+
 }

@@ -31,4 +31,12 @@ public class ChatController {
     public List<ChatMessage> getChatHistory(@AuthenticationPrincipal Account account) {
         return chatService.getChatHistory(account);
     }
+
+
+    @DeleteMapping("/chat/history")
+    public Map<String, String> clearChatHistory(@AuthenticationPrincipal Account account) {
+        chatService.clearChatHistory(account);
+        return Map.of("message", "Chat history cleared");
+    }
+
 }
