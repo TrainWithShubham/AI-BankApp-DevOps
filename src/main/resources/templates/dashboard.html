@@ -6,130 +6,74 @@
     <nav th:replace="~{fragments/layout :: navbar-auth}"></nav>
 
     <div class="dashboard-wrapper fade-in">
+        <!-- Balance Card -->
+        <div class="glass-card balance-card fade-in">
+            <div class="balance-label">Total Balance</div>
+            <div class="balance-amount">
+                <span class="currency">$</span><span th:text="${#numbers.formatDecimal(account.balance, 1, 2)}">0.00</span>
+            </div>
+            <div class="account-info">
+                <span><i class="bi bi-person-circle"></i> <span th:text="${account.username}">user</span></span>
+                <span><i class="bi bi-hash"></i> Account #<span th:text="${account.id}">1</span></span>
+                <span><i class="bi bi-wallet2"></i> Savings</span>
+            </div>
+        </div>
+
         <!-- Error Message -->
         <div th:if="${error}" class="alert alert-glass mb-4 text-center fade-in">
             <i class="bi bi-exclamation-triangle"></i> <span th:text="${error}"></span>
         </div>
 
-        <!-- Main Dashboard Grid -->
-        <div class="dashboard-grid">
-            <!-- Left Column: Balance & Stats -->
-            <div class="dashboard-left">
-                <!-- Balance Hero Card -->
-                <div class="glass-card balance-hero fade-in">
-                    <div class="balance-hero-header">
-                        <div>
-                            <div class="balance-label">Available Balance</div>
-                            <div class="balance-amount">
-                                <span class="currency">$</span><span th:text="${#numbers.formatDecimal(account.balance, 1, 2)}">0.00</span>
-                            </div>
-                        </div>
-                        <div class="balance-hero-icon">
-                            <i class="bi bi-wallet2"></i>
-                        </div>
+        <!-- Action Cards -->
+        <div class="action-cards">
+            <!-- Deposit -->
+            <div class="glass-card action-card fade-in fade-in-delay-1">
+                <h5><i class="bi bi-plus-circle text-success"></i> Deposit</h5>
+                <form th:action="@{/deposit}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label" for="depositAmount">Amount</label>
+                        <input type="number" class="form-control" id="depositAmount" name="amount"
+                               step="0.01" min="0.01" placeholder="0.00" required>
                     </div>
-                    <div class="balance-hero-footer">
-                        <div class="balance-info-item">
-                            <i class="bi bi-person-circle"></i>
-                            <span th:text="${account.username}">user</span>
-                        </div>
-                        <div class="balance-info-item">
-                            <i class="bi bi-hash"></i>
-                            <span>ID: <span th:text="${account.id}">1</span></span>
-                        </div>
-                        <span class="status-badge-sm"><span class="status-dot"></span> Active</span>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="quick-actions-compact">
-                    <a th:href="@{/transactions}" class="quick-action-btn">
-                        <i class="bi bi-clock-history"></i>
-                        <span>History</span>
-                    </a>
-                    <button type="button" class="quick-action-btn" onclick="document.getElementById('depositAmount').focus()">
-                        <i class="bi bi-download"></i>
-                        <span>Deposit</span>
+                    <button type="submit" class="btn btn-accent w-100">
+                        <i class="bi bi-arrow-down-circle"></i> Deposit
                     </button>
-                    <button type="button" class="quick-action-btn" onclick="document.getElementById('withdrawAmount').focus()">
-                        <i class="bi bi-upload"></i>
-                        <span>Withdraw</span>
-                    </button>
-                </div>
+                </form>
             </div>
 
-            <!-- Right Column: Action Forms -->
-            <div class="dashboard-right">
-                <!-- Deposit -->
-                <div class="glass-card action-card-compact fade-in fade-in-delay-1">
-                    <div class="action-card-header">
-                        <i class="bi bi-plus-circle text-success"></i>
-                        <h5>Deposit Money</h5>
+            <!-- Withdraw -->
+            <div class="glass-card action-card fade-in fade-in-delay-2">
+                <h5><i class="bi bi-dash-circle text-danger"></i> Withdraw</h5>
+                <form th:action="@{/withdraw}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label" for="withdrawAmount">Amount</label>
+                        <input type="number" class="form-control" id="withdrawAmount" name="amount"
+                               step="0.01" min="0.01" placeholder="0.00" required>
                     </div>
-                    <form th:action="@{/deposit}" method="post">
-                        <div class="mb-3">
-                            <label class="form-label" for="depositAmount">Amount</label>
-                            <div class="input-with-icon">
-                                <span class="input-icon">$</span>
-                                <input type="number" class="form-control" id="depositAmount" name="amount"
-                                       step="0.01" min="0.01" placeholder="0.00" required>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-accent w-100">
-                            <i class="bi bi-arrow-down-circle"></i> Deposit
-                        </button>
-                    </form>
-                </div>
+                    <button type="submit" class="btn btn-accent w-100">
+                        <i class="bi bi-arrow-up-circle"></i> Withdraw
+                    </button>
+                </form>
+            </div>
 
-                <!-- Withdraw -->
-                <div class="glass-card action-card-compact fade-in fade-in-delay-2">
-                    <div class="action-card-header">
-                        <i class="bi bi-dash-circle text-danger"></i>
-                        <h5>Withdraw Money</h5>
+            <!-- Transfer -->
+            <div class="glass-card action-card fade-in fade-in-delay-3">
+                <h5><i class="bi bi-arrow-left-right text-info"></i> Transfer</h5>
+                <form th:action="@{/transfer}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label" for="toUsername">Recipient Username</label>
+                        <input type="text" class="form-control" id="toUsername" name="toUsername"
+                               placeholder="Enter username" required>
                     </div>
-                    <form th:action="@{/withdraw}" method="post">
-                        <div class="mb-3">
-                            <label class="form-label" for="withdrawAmount">Amount</label>
-                            <div class="input-with-icon">
-                                <span class="input-icon">$</span>
-                                <input type="number" class="form-control" id="withdrawAmount" name="amount"
-                                       step="0.01" min="0.01" placeholder="0.00" required>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-accent w-100">
-                            <i class="bi bi-arrow-up-circle"></i> Withdraw
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Transfer -->
-                <div class="glass-card action-card-compact fade-in fade-in-delay-3">
-                    <div class="action-card-header">
-                        <i class="bi bi-arrow-left-right text-info"></i>
-                        <h5>Transfer Funds</h5>
+                    <div class="mb-3">
+                        <label class="form-label" for="transferAmount">Amount</label>
+                        <input type="number" class="form-control" id="transferAmount" name="amount"
+                               step="0.01" min="0.01" placeholder="0.00" required>
                     </div>
-                    <form th:action="@{/transfer}" method="post">
-                        <div class="mb-3">
-                            <label class="form-label" for="toUsername">Recipient</label>
-                            <div class="input-with-icon">
-                                <span class="input-icon"><i class="bi bi-person"></i></span>
-                                <input type="text" class="form-control" id="toUsername" name="toUsername"
-                                       placeholder="Username" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="transferAmount">Amount</label>
-                            <div class="input-with-icon">
-                                <span class="input-icon">$</span>
-                                <input type="number" class="form-control" id="transferAmount" name="amount"
-                                       step="0.01" min="0.01" placeholder="0.00" required>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-accent w-100">
-                            <i class="bi bi-send"></i> Transfer
-                        </button>
-                    </form>
-                </div>
+                    <button type="submit" class="btn btn-accent w-100">
+                        <i class="bi bi-send"></i> Transfer
+                    </button>
+                </form>
             </div>
         </div>
     </div>

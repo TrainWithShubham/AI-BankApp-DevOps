@@ -20,15 +20,35 @@ services:
     networks:
       - bankapp-net
 
-  # ollama:                          # ← FLOW 1: keep commented (t3.micro)
-  #   image: ollama/ollama           # ← FLOW 2: uncomment all these lines (c7i-flex.large)
-  #   container_name: bankapp-ollama
-  #   ports:
-  #     - "11434:11434"
-  #   volumes:
-  #     - ollama-data:/root/.ollama
-  #   networks:
-  #     - bankapp-net
+  ollama:
+    image: ollama/ollama
+    container_name: bankapp-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bankapp-net
+
+  ollama-pull-model:
+    image: ollama/ollama
+    container_name: ollama-pull-model
+    environment:
+      - OLLAMA_HOST=ollama
+    volumes:
+      - ollama-data:/root/.ollama
+    depends_on:
+      ollama:
+        condition: service_healthy
+    entrypoint: /bin/sh
+    command: -c "ollama pull tinyllama"
+    networks:
+      - bankapp-net
 
   bankapp:
     image: ${DOCKERHUB_USER}/bankapp:${DOCKER_TAG:-latest}
@@ -41,16 +61,18 @@ services:
       MYSQL_DATABASE: bankappdb
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      # OLLAMA_URL: http://ollama:11434   # ← FLOW 2: uncomment this line too
+      OLLAMA_URL: http://ollama:11434
     depends_on:
       mysql:
         condition: service_healthy
+      ollama-pull-model:
+        condition: service_completed_successfully
     networks:
       - bankapp-net
 
 volumes:
   mysql-data:
-  # ollama-data:                     # ← FLOW 2: uncomment this line too
+  ollama-data:
 
 networks:
   bankapp-net:
