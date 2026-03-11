@@ -60,7 +60,7 @@ jobs:
             sudo docker compose up -d --force-recreate
             
             # Clean up old images (keep only current + previous version)
-            sudo docker images nandan56/bankapp --format "{{.ID}}" | tail -n +3 | xargs -r sudo docker rmi -f || true
+            sudo docker images ${{ vars.DOCKERHUB_USER }}/bankapp --format "{{.ID}}" | tail -n +3 | xargs -r sudo docker rmi -f || true
             echo "✅ Cleaned up old Docker images"
 
       - name: Wait for application to be ready

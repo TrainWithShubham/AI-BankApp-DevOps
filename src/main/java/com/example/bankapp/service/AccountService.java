@@ -95,4 +95,8 @@ public class AccountService implements UserDetailsService {
     public List<Transaction> getTransactionHistory(Account account) {
         return transactionRepository.findByAccountIdOrderByTimestampDesc(account.getId());
     }
+
+    public java.util.Optional<Account> getAccountById(Long id) {
+        return accountRepository.findById(id);
+    }
 }
