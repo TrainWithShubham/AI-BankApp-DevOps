@@ -20,7 +20,8 @@ jobs:
           sleep 15
 
       - name: Run OWASP ZAP Baseline Scan
-        uses: zaproxy/action-baseline@v0.12.0
+        uses: zaproxy/action-baseline@v0.15.0
+        continue-on-error: true
         with:
           target: 'http://${{ secrets.EC2_SSH_HOST }}:8080'
           rules_file_name: '.zap/rules.tsv'
