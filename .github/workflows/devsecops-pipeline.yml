@@ -29,7 +29,11 @@ jobs:
   docker-scan:
     uses: ./.github/workflows/docker-lint.yml
 
+
+  # ── SAST — Static Application Security Testing ──────────────────
+
   sast-scan:
+    needs: [code-quality, secrets-scan, dependency-scan, docker-scan]
     uses: ./.github/workflows/sast-scan.yml
     secrets: inherit
 
@@ -37,7 +41,7 @@ jobs:
   # ── Build — only after all scans pass ───────────────────────────
 
   build:
-    needs: [code-quality, secrets-scan, dependency-scan, docker-scan, sast-scan]
+    needs: [sast-scan]
     uses: ./.github/workflows/docker-build-push.yml
     secrets: inherit
 
