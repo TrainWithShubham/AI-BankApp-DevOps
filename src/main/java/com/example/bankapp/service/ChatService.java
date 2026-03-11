@@ -58,7 +58,11 @@ public class ChatService {
         Map<String, Object> request = Map.of(
             "model", model,
             "messages", messages,
-            "stream", false
+            "stream", false,
+            "options", Map.of(
+                "temperature", 0.1,  // Low temperature = more factual, less creative
+                "top_p", 0.9
+            )
         );
 
         try {
@@ -86,18 +90,29 @@ public class ChatService {
 
     private String buildContext(Account account, List<Transaction> transactions) {
         StringBuilder sb = new StringBuilder();
-        sb.append("You are a helpful banking assistant. ");
-        sb.append("Answer in 1-2 sentences. ");
-        sb.append("Current balance: $").append(account.getBalance());
+        sb.append("STRICT RULES:\n");
+        sb.append("1. ONLY answer using the exact data below\n");
+        sb.append("2. DO NOT invent names, dates, or amounts\n");
+        sb.append("3. If asked about transactions, ONLY mention the ones listed\n");
+        sb.append("4. Keep answers under 2 sentences\n\n");
+        
+        sb.append("ACCOUNT DATA:\n");
+        sb.append("Username: ").append(account.getUsername()).append("\n");
+        sb.append("Current Balance: $").append(account.getBalance()).append("\n\n");
 
         if (!transactions.isEmpty()) {
-            sb.append(". Recent: ");
+            sb.append("TRANSACTION HISTORY:\n");
             int limit = Math.min(transactions.size(), 3);
             for (int i = 0; i < limit; i++) {
                 Transaction t = transactions.get(i);
-                sb.append(t.getType()).append(" $").append(t.getAmount());
-                if (i < limit - 1) sb.append(", ");
+                sb.append((i+1)).append(". ")
+                  .append(t.getType())
+                  .append(" of $").append(t.getAmount())
+                  .append(" on ").append(t.getTimestamp().toLocalDate())
+                  .append("\n");
             }
+        } else {
+            sb.append("TRANSACTION HISTORY: None\n");
         }
 
         return sb.toString();
