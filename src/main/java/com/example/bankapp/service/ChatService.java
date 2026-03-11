@@ -34,11 +34,15 @@ public class ChatService {
         // Save user message
         chatMessageRepository.save(new ChatMessage(account.getId(), "user", userMessage));
         
+        // ⭐ REFRESH account from database to get latest balance
+        Account freshAccount = accountService.getAccountById(account.getId())
+            .orElse(account); // Fallback to passed account if not found
+        
         // Get chat history
         List<ChatMessage> history = chatMessageRepository.findByAccountIdOrderByTimestampAsc(account.getId());
         
-        List<Transaction> recent = accountService.getTransactionHistory(account);
-        String context = buildContext(account, recent);
+        List<Transaction> recent = accountService.getTransactionHistory(freshAccount);
+        String context = buildContext(freshAccount, recent);  // ⭐ Use fresh account
 
         // Build messages with history (last 10 messages)
         List<Map<String, String>> messages = new java.util.ArrayList<>();
