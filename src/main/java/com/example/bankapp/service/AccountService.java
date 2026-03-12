@@ -86,8 +86,8 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(to);
 
         LocalDateTime now = LocalDateTime.now();
-        transactionRepository.save(new Transaction(amount, "Transfer Out", now, from));
-        transactionRepository.save(new Transaction(amount, "Transfer In", now, to));
+        transactionRepository.save(new Transaction(amount, "Transfer to " + toUsername, now, from));
+        transactionRepository.save(new Transaction(amount, "Transfer from " + from.getUsername(), now, to));
 
         return null; // null means success
     }
