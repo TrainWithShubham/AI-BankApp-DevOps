@@ -41,7 +41,7 @@ A modern, secure banking application built with Spring Boot 3.4, featuring a com
 | AI (Optional)  | Ollama (TinyLlama)                            |
 | Containerization | Docker, Docker Compose                      |
 | CI/CD          | GitHub Actions                                |
-| Security Scans | Trivy, OWASP, Gitleaks                        |
+| Security Scans | SAST (Semgrep), DAST (OWASP ZAP), Trivy, OWASP Dependency Check, Gitleaks |
 | Deployment     | AWS EC2                                       |
 | Monitoring     | Spring Actuator, Prometheus                   |
 
@@ -140,26 +140,53 @@ The project includes a complete CI/CD pipeline with security scanning:
 
 2. **Security Scanning**
    - Secret detection (Gitleaks)
-   - Dependency vulnerability scan (OWASP)
+   - Dependency vulnerability scan (OWASP Dependency Check)
 
-3. **Build & Push**
+3. **SAST - Static Application Security Testing**
+   - Semgrep scanner with Java, OWASP Top 10, and secrets rules
+   - Scans source code for security vulnerabilities before build
+
+4. **Build & Push**
    - Multi-stage Docker build
    - Push to Docker Hub with tags: `latest`, `branch-name`, `commit-sha`
 
-4. **Container Scanning**
+5. **Container Scanning**
    - Trivy image scan for CVEs
    - Fail on CRITICAL/HIGH vulnerabilities
 
-5. **Deployment**
+6. **Deployment**
    - Automated deployment to AWS EC2
    - Docker Compose orchestration
    - Health checks
 
+7. **DAST - Dynamic Application Security Testing**
+   - OWASP ZAP baseline scan on live application
+   - Scans running app for runtime vulnerabilities
+   - Report uploaded as artifact
+
 ### GitHub Actions Workflow
 
 ```yaml
-# Triggered on push to main branch
-Code Quality → Security Scans → Build → Image Scan → Deploy
+# Triggered on push to main/devsecops branch or manual dispatch
+Code Quality → Security Scans → SAST → Build → Image Scan → Deploy → DAST
+```
+
+**Complete Pipeline Flow:**
+```
+1. Code Quality (Hadolint)
+2. Secrets Scan (Gitleaks)
+3. Dependency Scan (OWASP)
+4. Docker Lint
+   ↓
+5. SAST (Semgrep) ← Runs only after all above pass
+   ↓
+6. Build & Push (Docker)
+   ↓
+7. Image Scan (Trivy)
+   ↓
+8. Deploy (EC2)
+   ↓
+9. DAST (OWASP ZAP) ← Scans live application
 ```
 
 ### Required GitHub Secrets
@@ -226,14 +253,20 @@ Configure these in your repository settings (Settings → Secrets and variables 
 
 ## Security Features
 
+### Application Security
 - **Authentication** — Form-based login with Spring Security
 - **Password Hashing** — BCrypt with configurable strength
 - **CSRF Protection** — Enabled for all state-changing operations
 - **SQL Injection Prevention** — JPA/Hibernate parameterized queries
 - **XSS Protection** — Thymeleaf auto-escaping
-- **Dependency Scanning** — OWASP Dependency Check in CI/CD
-- **Container Scanning** — Trivy CVE detection
-- **Secret Detection** — Gitleaks prevents credential leaks
+
+### DevSecOps Security Scanning
+- **SAST (Static Analysis)** — Semgrep scans source code for vulnerabilities (Java, OWASP Top 10, secrets)
+- **DAST (Dynamic Analysis)** — OWASP ZAP scans live application for runtime vulnerabilities
+- **SCA (Software Composition Analysis)** — OWASP Dependency Check scans Maven dependencies for known CVEs
+- **Container Scanning** — Trivy scans Docker images for OS and library vulnerabilities
+- **Secret Detection** — Gitleaks scans Git history to prevent credential leaks
+- **Infrastructure as Code** — Hadolint validates Dockerfile best practices
 
 ## Monitoring & Observability
 

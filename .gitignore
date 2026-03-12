@@ -22,12 +22,6 @@ target/
 ### Environment Variables ###
 .env
 
-### Trivy ###
-.trivyignore
-
-### ZAP ###
-.zap
-
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
