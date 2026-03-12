@@ -54,35 +54,25 @@ public class ChatService {
 
     private String buildContext(Account account, List<Transaction> transactions) {
         StringBuilder sb = new StringBuilder();
-        
-        // Strict system prompt to prevent hallucinations
-        sb.append("You are a banking assistant. Follow these rules strictly:\n");
-        sb.append("1. ONLY answer questions using the data provided below\n");
-        sb.append("2. If asked about data you don't have, say 'I don't have that information'\n");
-        sb.append("3. NEVER make up numbers, dates, or transaction details\n");
-        sb.append("4. Keep responses under 3 sentences\n");
-        sb.append("5. Be helpful and friendly\n");
-        sb.append("\n=== CUSTOMER DATA (USE ONLY THIS) ===\n");
-        sb.append("Username: ").append(account.getUsername()).append("\n");
-        sb.append("Current Balance: $").append(account.getBalance()).append("\n");
-        sb.append("Account ID: ").append(account.getId()).append("\n");
+        sb.append("You are a helpful banking assistant for BankApp. ");
+        sb.append("Keep answers short and friendly (2-3 sentences max). ");
+        sb.append("\n\nCustomer details:");
+        sb.append("\n- Username: ").append(account.getUsername());
+        sb.append("\n- Balance: $").append(account.getBalance());
+        sb.append("\n- Account ID: ").append(account.getId());
 
         if (!transactions.isEmpty()) {
-            sb.append("\nRecent Transactions (last ").append(Math.min(transactions.size(), 5)).append("):\n");
+            sb.append("\n\nRecent transactions:");
             int limit = Math.min(transactions.size(), 5);
             for (int i = 0; i < limit; i++) {
                 Transaction t = transactions.get(i);
-                sb.append("- ").append(t.getType())
+                sb.append("\n- ").append(t.getType())
                   .append(": $").append(t.getAmount())
-                  .append(" on ").append(t.getTimestamp().toLocalDate())
-                  .append("\n");
+                  .append(" on ").append(t.getTimestamp().toLocalDate());
             }
         } else {
-            sb.append("\nNo transactions yet.\n");
+            sb.append("\n\nNo transactions yet.");
         }
-        
-        sb.append("=== END OF DATA ===\n");
-        sb.append("\nAnswer the user's question using ONLY the data above.");
 
         return sb.toString();
     }
