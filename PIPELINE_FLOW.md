@@ -15,7 +15,7 @@
         │  │ 2. Secrets Scan (Gitleaks)       │   │
         │  │ 3. Dependency Scan (OWASP)       │   │
         │  │ 4. Docker Lint (Hadolint)        │   │
-        │  │ 5. SAST (Semgrep) ⭐ NEW         │   │
+        │  │ 5. SAST (Semgrep)                │   │
         │  └──────────────────────────────────┘   │
         └─────────────────────────────────────────┘
                               │
@@ -33,7 +33,7 @@
         │    STAGE 3: Deploy & DAST               │
         │  ┌──────────────────────────────────┐   │
         │  │ 8. Deploy to EC2                 │   │
-        │  │ 9. DAST (OWASP ZAP) ⭐ NEW       │   │
+        │  │ 9. DAST (OWASP ZAP)              │   │
         │  └──────────────────────────────────┘   │
         └─────────────────────────────────────────┘
 ```
@@ -60,7 +60,7 @@
 - ✅ Secrets Scan
 - ✅ Dependency Scan (OWASP with cache)
 - ✅ Docker Lint
-- ⭐ **SAST (Semgrep)** - NEW!
+- ⭐ **SAST (Semgrep)**
 
 ### Gate 6-7: Build & Scan (Sequential)
 - ✅ Maven Build
@@ -68,7 +68,7 @@
 
 ### Gate 8-9: Deploy & Test (Sequential)
 - ✅ Deploy to EC2
-- ⭐ **DAST (OWASP ZAP)** - NEW!
+- ⭐ **DAST (OWASP ZAP)** 
 
 ## What You'll See in GitHub Actions
 
@@ -78,11 +78,11 @@ devsecops-pipeline
 ├── secrets-scan ✓
 ├── dependency-scan ✓
 ├── docker-scan ✓
-├── sast ⭐ NEW
+├── sast ⭐
 ├── build ✓
 ├── trivy ✓
 ├── deploy ✓
-└── dast ⭐ NEW
+└── dast ⭐
 ```
 
 ## SAST vs DAST
@@ -106,7 +106,7 @@ devsecops-pipeline
 
 1. `owasp-dependency-check-report` (HTML)
 2. `trivy-scan-report` (SARIF)
-3. `zap-dast-report` (HTML) ⭐ NEW
+3. `zap-dast-report` (HTML) ⭐
 
 ---
 

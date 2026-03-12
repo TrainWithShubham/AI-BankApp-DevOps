@@ -13,7 +13,7 @@ on:
 
 jobs:
 
-  # ── CI Security Scans ────────────────────────────────────────────
+  # CI Security Scans
 
   code-quality:
     uses: ./.github/workflows/code-quality.yml
@@ -30,7 +30,7 @@ jobs:
     uses: ./.github/workflows/docker-lint.yml
 
 
-  # ── SAST — Static Application Security Testing ──────────────────
+  # SAST — Static Application Security Testing
 
   sast-scan:
     needs: [code-quality, secrets-scan, dependency-scan, docker-scan]
@@ -38,7 +38,7 @@ jobs:
     secrets: inherit
 
 
-  # ── Build — only after all scans pass ───────────────────────────
+  #  Build — only after all scans pass
 
   build:
     needs: [sast-scan]
@@ -46,7 +46,7 @@ jobs:
     secrets: inherit
 
 
-  # ── Image scan — scan the freshly built image with Trivy ─────────
+  #  Image scan — scan the freshly built image with Trivy
 
   trivy:
     needs: [build]
@@ -54,14 +54,14 @@ jobs:
     secrets: inherit
 
 
-  # ── Deploy — to prod server only after image is verified clean ───
+  # Deploy — to prod server only after image is verified clean
 
   deploy:
     needs: [trivy]
     uses: ./.github/workflows/deploy-to-server.yml
     secrets: inherit
 
-  # ── DAST — scan the live application after deployment ────────────
+  # DAST — scan the live application after deployment
 
   dast-scan:
     needs: [deploy]

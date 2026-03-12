@@ -109,7 +109,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- OWASP: called via workflow, no config needed here -->
+			<!-- OWASP: called via workflow, no OWASP config needed here -->
 
 		</plugins>
 	</build>

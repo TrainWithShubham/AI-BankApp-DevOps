@@ -80,8 +80,8 @@ open http://localhost:8080
 ```bash
 # Start MySQL (or use Docker)
 docker run -d --name mysql \
-  -e MYSQL_ROOT_PASSWORD=Test@123 \
-  -e MYSQL_DATABASE=bankappdb \
+  -e MYSQL_ROOT_PASSWORD=Testing@123 \
+  -e MYSQL_DATABASE=aibankappdb \
   -p 3306:3306 mysql:8.0
 
 # Build and run the application
@@ -114,9 +114,15 @@ docker build -f Dockerfile.multistage -t bankapp:latest .
 | mysql    | 3306  | MySQL 8.0 database             |
 | ollama   | 11434 | AI model server (optional)     |
 
+**💡 Cost Optimization Tip:**  
+For production deployment without AI features, comment out the `ollama` service in `docker-compose.yml`. This allows you to run on smaller instances like `t2.micro` (Free tier eligible) instead of requiring `c7i.large` or larger instances.
+
 ```bash
-# Start services
+# Start all services (including Ollama)
 docker compose up -d
+
+# Start without Ollama (cost-effective)
+docker compose up -d bankapp mysql
 
 # Stop services
 docker compose down
@@ -215,9 +221,9 @@ Configure these in your repository settings (Settings → Secrets and variables 
 |--------------------|--------------|--------------------------------|
 | `MYSQL_HOST`       | localhost    | Database host                  |
 | `MYSQL_PORT`       | 3306         | Database port                  |
-| `MYSQL_DATABASE`   | bankappdb    | Database name                  |
+| `MYSQL_DATABASE`   | aibankappdb  | Database name                  |
 | `MYSQL_USER`       | root         | Database username              |
-| `MYSQL_PASSWORD`   | Test@123     | Database password              |
+| `MYSQL_PASSWORD`   | Testing@123  | Database password              |
 | `OLLAMA_URL`       | http://localhost:11434 | AI model server URL |
 | `DOCKERHUB_USER`   | -            | Docker Hub username            |
 | `DOCKER_TAG`       | latest       | Docker image tag               |
@@ -285,12 +291,45 @@ curl http://localhost:8080/actuator/info
 
 ## Deployment
 
+### Resource Requirements
+
+**Based on Real-World Testing:**
+
+| Configuration | Instance Type | RAM | vCPU | Monthly Cost | Use Case |
+|--------------|---------------|-----|------|--------------|----------|
+| **Production (No AI)** | t2.micro / t3.micro | 1GB | 1-2 | ~$8-10 | Banking app only (MySQL + BankApp) |
+| **With AI Chatbot** | c7i.large / t3.large | 8GB | 2 | ~$60-80 | Full features with Ollama |
+
+**Why the difference?**
+- **Without Ollama:** Only 2 lightweight containers (MySQL + Spring Boot)
+- **With Ollama:** AI model requires 4-6GB RAM + significant CPU for inference
+- **Tested:** t2.micro works perfectly for core banking features
+- **Warning:** Running Ollama on instances smaller than 8GB RAM causes OOM (Out of Memory) crashes
+
+**Recommendation:** Start with t2.micro (free tier), add Ollama later if needed.
+
 ### AWS EC2 Deployment
 
 1. **Launch EC2 Instance**
-   - Ubuntu 22.04 or later
-   - t3.small or larger (2GB RAM minimum)
+
+   **Without Ollama (Recommended for cost optimization):**
+   - Instance Type: `t2.micro` or `t3.micro` (1GB RAM)
+   - Only 2 containers: MySQL + BankApp
+   - Cost: ~$8-10/month (Free tier eligible)
+   - Perfect for production banking app without AI features
+   
+   **With Ollama AI Chatbot:**
+   - Instance Type: `c7i.large` or `t3.large` minimum (2 vCPU, 8GB RAM)
+   - 3 containers: MySQL + BankApp + Ollama
+   - Cost: ~$60-80/month
+   - Ollama requires significant CPU/RAM for model inference
+   - Note: Smaller instances will cause OOM (Out of Memory) errors
+   
+   **Common Configuration:**
+   - OS: Ubuntu 22.04 or later
+   - Storage: 20GB minimum (30GB recommended with Ollama)
    - Open ports: 22 (SSH), 8080 (HTTP)
+   - Security Group: Allow inbound on ports 22, 8080
 
 2. **Configure GitHub Secrets**
    - Add all required secrets (see above)
