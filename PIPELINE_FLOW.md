@@ -110,4 +110,3 @@ devsecops-pipeline
 
 ---
 
-**Now you have complete security coverage: SAST + SCA + Container Scan + DAST!** 🎉
