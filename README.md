@@ -344,6 +344,12 @@ curl http://localhost:8080/actuator/info
 # SSH to EC2
 ssh -i your-key.pem ubuntu@your-ec2-ip
 
+# Install Docker and Docker Compose (if not already installed)
+sudo apt update
+sudo apt install -y docker.io docker-compose
+sudo usermod -aG docker $USER
+# Log out and back in for group changes to take effect
+
 # Create deployment directory
 mkdir -p ~/devops
 cd ~/devops
@@ -357,13 +363,20 @@ DB_PASSWORD=Test@123
 DB_ROOT_PASSWORD=Test@123
 EOF
 
-# Copy docker-compose.yml to server
-# Then start services
+# Copy docker-compose.yml to server (or download from repo)
+wget https://raw.githubusercontent.com/Nandan29300/AI-BankApp-DevOps/devsecops/docker-compose.yml
+
+# Start services (MySQL will automatically create 'bankappdb' database)
 docker compose up -d
 
 # Check logs
 docker compose logs -f
+
+# Verify database was created
+docker exec -it devops-mysql-1 mysql -uroot -pTest@123 -e "SHOW DATABASES;"
 ```
+
+**Note:** The database `bankappdb` is automatically created by Docker Compose using the `MYSQL_DATABASE` environment variable. No manual database creation needed!
 
 ## Development
 
