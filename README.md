@@ -52,7 +52,20 @@ A modern, secure banking application built with Spring Boot 3.4, featuring a com
 - Java 21 (for local development)
 - Maven 3.9+ (for local development)
 
-### Run with Docker Compose (Recommended)
+### Production Deployment (Method 2 - Default)
+
+This project uses **Method 2** by default: Separate Ollama EC2 for better resource isolation.
+
+See [METHOD2_SETUP.md](METHOD2_SETUP.md) for complete production deployment guide.
+
+**Architecture:**
+```
+App EC2 (MySQL + BankApp) ──→ Ollama EC2 (AI Engine)
+```
+
+### Local Development (Method 1)
+
+For local testing with all services on one machine:
 
 ```bash
 # Clone the repository
@@ -65,7 +78,7 @@ cp .env.example .env
 # Edit .env with your credentials
 nano .env
 
-# Start all services (MySQL + BankApp)
+# Start all services (MySQL + Ollama + BankApp)
 docker compose up -d
 
 # View logs
@@ -74,6 +87,8 @@ docker compose logs -f bankapp
 # Access the application
 open http://localhost:8080
 ```
+
+**Note:** `docker-compose.yml` includes Ollama for local development. Production uses `app-tier.yml` with separate Ollama EC2.
 
 ### Run Locally (Development)
 
@@ -203,9 +218,12 @@ Configure these in your repository settings (Settings → Secrets and variables 
 - `DOCKERHUB_TOKEN` — Docker Hub access token
 
 **AWS EC2:**
-- `EC2_SSH_HOST` — EC2 public IP or DNS
+- `EC2_SSH_HOST` — App EC2 public IP or DNS
 - `EC2_SSH_USER` — SSH username (usually `ubuntu`)
 - `EC2_SSH_PRIVATE_KEY` — Private key (.pem file content)
+
+**Ollama (Method 2 - Production):**
+- `OLLAMA_URL` — Ollama EC2 private IP with port (e.g., `http://172.31.x.x:11434`)
 
 **Database:**
 - `DB_USERNAME` — Database username
@@ -214,6 +232,8 @@ Configure these in your repository settings (Settings → Secrets and variables 
 
 **GitHub Variables:**
 - `DOCKERHUB_USER` — Your Docker Hub username
+
+**Note:** For Method 1 (local/all-in-one), `OLLAMA_URL` is not needed as Ollama runs in Docker.
 
 ## Environment Variables
 
@@ -290,6 +310,45 @@ curl http://localhost:8080/actuator/info
 ```
 
 ## Deployment
+
+### Ollama AI Model Automation
+
+This project supports **two methods** to automate Ollama and TinyLlama model pulling:
+
+#### Method 1: Docker Compose (Local/Development)
+The `docker-compose.yml` includes an `ollama-pull-model` service that automatically:
+- Waits for Ollama service to be healthy
+- Pulls the `tinyllama` model
+- Shares the model with the main Ollama service
+
+```bash
+# Start all services - model pulls automatically
+docker compose up -d
+```
+
+#### Method 2: EC2 User Data Script (Production/Dedicated AI Tier)
+For a **separate dedicated Ollama EC2 instance**, use the [scripts/ollama-setup.sh](scripts/ollama-setup.sh) script:
+
+**During EC2 Launch:**
+1. Launch a new Ubuntu EC2 instance (t3.large or larger recommended)
+2. Open inbound port `11434` in Security Group
+3. In the **User Data** field, paste the entire content of `scripts/ollama-setup.sh`
+4. Launch the instance - Ollama installs and pulls tinyllama automatically!
+
+**What the script does:**
+- Installs Ollama natively on the EC2
+- Configures it to listen on all interfaces (0.0.0.0)
+- Automatically pulls the tinyllama model
+- Includes health checks and retry logic
+
+**Verify after launch:**
+```bash
+# SSH into the Ollama EC2
+ssh -i your-key.pem ubuntu@ollama-ec2-ip
+
+# Check if model is pulled
+ollama list
+```
 
 ### Resource Requirements
 

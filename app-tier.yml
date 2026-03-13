@@ -1,0 +1,48 @@
+# Method 2 - Option A: App EC2 with MySQL container + Separate Ollama EC2
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: bankapp-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: bankappdb
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - bankapp-net
+
+  bankapp:
+    image: ${DOCKERHUB_USER}/bankapp:${DOCKER_TAG:-latest}
+    container_name: bankapp
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: bankappdb
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      OLLAMA_URL: ${OLLAMA_URL}  # Points to separate Ollama EC2
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: always
+    networks:
+      - bankapp-net
+
+volumes:
+  mysql-data:
+
+networks:
+  bankapp-net:
+    driver: bridge

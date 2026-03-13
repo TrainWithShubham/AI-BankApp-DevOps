@@ -1,4 +1,7 @@
 # Deploy the safe / secure / tested image to prod server
+# DEFAULT: Method 2 (Separate Ollama EC2)
+# To use Method 1 (All-in-One), see comments below
+
 name: Deploy to Server
 
 on:
@@ -30,14 +33,25 @@ jobs:
             sudo usermod -aG docker $USER
             mkdir -p ~/devops
 
-      - name: Copy docker-compose file to server
+      # METHOD 2 (Default): Copy app-tier.yml for separate Ollama EC2
+      - name: Copy app-tier compose file to server
         uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.EC2_SSH_HOST }}
           username: ${{ secrets.EC2_SSH_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          source: docker-compose.yml
+          source: app-tier.yml
           target: ~/devops
+
+      # METHOD 1 (Alternative): Uncomment below and comment above for all-in-one setup
+      # - name: Copy docker-compose file to server
+      #   uses: appleboy/scp-action@v1
+      #   with:
+      #     host: ${{ secrets.EC2_SSH_HOST }}
+      #     username: ${{ secrets.EC2_SSH_USER }}
+      #     key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+      #     source: docker-compose.yml
+      #     target: ~/devops
 
       - name: SSH to prod server — run the app
         uses: appleboy/ssh-action@v1.0.3
@@ -47,17 +61,32 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             cd ~/devops
+            # METHOD 2 (Default): Using app-tier.yml with separate Ollama EC2
             cat > .env << 'EOF'
             DOCKERHUB_USER=${{ vars.DOCKERHUB_USER }}
             DOCKER_TAG=${{ github.sha }}
             DB_USERNAME=${{ secrets.DB_USERNAME }}
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}
+            OLLAMA_URL=${{ secrets.OLLAMA_URL }}
             EOF
             echo ${{ secrets.DOCKERHUB_TOKEN }} | sudo docker login --username ${{ vars.DOCKERHUB_USER }} --password-stdin
-            sudo docker compose down
-            sudo docker compose pull
-            sudo docker compose up -d --force-recreate
+            sudo docker compose -f app-tier.yml down
+            sudo docker compose -f app-tier.yml pull
+            sudo docker compose -f app-tier.yml up -d --force-recreate
+            
+            # METHOD 1 (Alternative): Uncomment below and comment above for all-in-one setup
+            # cat > .env << 'EOF'
+            # DOCKERHUB_USER=${{ vars.DOCKERHUB_USER }}
+            # DOCKER_TAG=${{ github.sha }}
+            # DB_USERNAME=${{ secrets.DB_USERNAME }}
+            # DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            # DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}
+            # EOF
+            # echo ${{ secrets.DOCKERHUB_TOKEN }} | sudo docker login --username ${{ vars.DOCKERHUB_USER }} --password-stdin
+            # sudo docker compose down
+            # sudo docker compose pull
+            # sudo docker compose up -d --force-recreate
             
             # Clean up old images (keep only current + previous version)
             sudo docker images ${{ vars.DOCKERHUB_USER }}/bankapp --format "{{.ID}}" | tail -n +3 | xargs -r sudo docker rmi -f || true
