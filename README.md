@@ -29,7 +29,10 @@ graph TD
     subgraph "AWS Infrastructure (VPC)"
         subgraph "Application Tier"
             AppEC2[App EC2 - Ubuntu/Docker]
-            DB[(MySQL 8.0 Container)]
+        end
+
+        subgraph "Data Tier"
+            RDS[(Amazon RDS - MySQL 8.0)]
         end
 
         subgraph "Artificial Intelligence Tier"
@@ -52,7 +55,7 @@ graph TD
     GH -->|4. DAST Scan| AppEC2
     
     User -->|Port 8080| AppEC2
-    AppEC2 -->|JDBC Connection| DB
+    AppEC2 -->|JDBC Connection| RDS
     AppEC2 -->|REST Integration| Ollama
     AppEC2 -->|Runtime Secrets| Secrets
     AppEC2 -->|Pull Image| ECR
@@ -82,7 +85,7 @@ The CI/CD pipeline enforces **9 sequential security gates** before any code reac
 
 - **Backend Framework**: Java 21, Spring Boot 3.4.1
 - **Security Strategy**: Spring Security, IAM OIDC, Secrets Manager
-- **Persistence Layer**: MySQL 8.0 (Docker Container)
+- **Persistence Layer**: Amazon RDS for MySQL 8.0 (Dev/Test Tier)
 - **AI Integration**: Ollama (TinyLlama)
 - **DevOps Tooling**: Docker, Docker Compose, GitHub Actions, AWS CLI, jq
 - **Infrastructure**: Amazon EC2, Amazon ECR, Amazon VPC
@@ -94,7 +97,6 @@ The CI/CD pipeline enforces **9 sequential security gates** before any code reac
 ### Phase 1: AWS Infrastructure Initialization
 
 1. **Container Registry (ECR)**:
-
    - Establish a private ECR repository named `devsecops-bankapp`.
 
       ![ECR](screenshots/2.png)
@@ -107,7 +109,7 @@ The CI/CD pipeline enforces **9 sequential security gates** before any code reac
       #!/bin/bash
 
       sudo apt update 
-      sudo apt install -y docker.io docker-compose-v2 jq
+      sudo apt install -y docker.io docker-compose-v2 jq mysql-client
       sudo usermod -aG docker ubuntu
       sudo newgrp docker
       sudo snap install aws-cli --classic
@@ -135,7 +137,18 @@ The CI/CD pipeline enforces **9 sequential security gates** before any code reac
 
       You will get your account details with IAM role assumed.
 
-3. **AI Engine Tier (Ollama)**:
+3. **Database Tier (RDS)**:
+   - Provision a MySQL 8.0 instance using the **Dev/Test** template.
+
+     ![rds](screenshots/5.png)
+
+   - Utilize the **Set up EC2 connection** feature to automatically establish connectivity with the Application EC2.
+
+     ![rds-ec2](screenshots/6.png)
+
+     ![rds-db-created](screenshots/7.png)
+
+4. **AI Engine Tier (Ollama)**:
    - Deploy a dedicated Ubuntu EC2 instance.
    - Open Inbound Port `11434` from the Application EC2 Security Group.
 
@@ -157,7 +170,25 @@ The CI/CD pipeline enforces **9 sequential security gates** before any code reac
 
 ---
 
-### Phase 2: Security and Identity Configuration
+### Phase 2: Database Initialization
+
+1. **Schema Provisioning**:
+   - Access the RDS instance from the Application EC2:
+
+     ```bash
+     mysql -h <RDS-ENDPOINT> -u <USERNAME> -p
+     ```
+
+   - Initialize the application database:
+
+     ```sql
+     CREATE DATABASE bankappdb;
+     EXIT;
+     ```
+
+---
+
+### Phase 3: Security and Identity Configuration
 
 The deployment pipeline utilizes OpenID Connect (OIDC) for secure, keyless authentication between GitHub and AWS.
 
@@ -175,7 +206,7 @@ The deployment pipeline utilizes OpenID Connect (OIDC) for secure, keyless authe
       - `Audience`: Select created one.
       - `GitHub organization`: Your GitHub Username or Orgs Name where this repo is located.
       - `GitHub repository`: Write the Repository name of this project. `(e.g, DevSecOps-Bankapp)`
-      - `GitHub branch`: branch to use for this project `(e.g, devsecops)`
+      - `GitHub branch`: branch to use for this project `(e.g, aws)`
       - Click on `Next`
 
       ![role](screenshots/11.png)
@@ -190,19 +221,19 @@ The deployment pipeline utilizes OpenID Connect (OIDC) for secure, keyless authe
 
 ---
 
-### Phase 3: Secrets and Pipeline Configuration
+### Phase 4: Secrets and Pipeline Configuration
 
 #### 1. AWS Secrets Manager
 Create a secret named `bankapp/prod-secrets` in `Other type of secret` with the following key-value pairs:
 
-| Secret Key | Description | Sample/Default Value |
-| :--- | :--- | :--- |
-| `DB_HOST` | The MySQL container service name | `db` |
-| `DB_PORT` | The database port | `3306` |
-| `DB_NAME` | The application database name | `bankappdb` |
-| `DB_USER` | The database username | `bankuser` |
-| `DB_PASSWORD` | The database password | `Test@123` |
-| `OLLAMA_URL` | The private URL for the AI tier | `http://<PRIVATE-IP>:11434` |
+| Secret Key | Description |
+| :--- | :--- |
+| `DB_HOST` | The RDS instance endpoint address |
+| `DB_PORT` | The database port (standard is `3306`) |
+| `DB_NAME` | The application database name (`bankappdb`) |
+| `DB_USER` | The administrative username for the RDS instance |
+| `DB_PASSWORD` | The administrative password for the RDS instance |
+| `OLLAMA_URL` | The private URL for the AI tier (`http://<PRIVATE-IP>:11434`) |
 
 ![aws-ssm](screenshots/14.png)
 
@@ -261,7 +292,7 @@ Configure the following Action Secrets within your GitHub repository settings:
 
 ## Continuous Integration and Deployment
 
-The DevSecOps lifecycle is orchestrated through the [DevSecOps Main Pipeline](.github/workflows/devsecops-main.yml), which securely sequences three modular workflows: [CI](.github/workflows/ci.yml), [Build](.github/workflows/build.yml), and [CD](.github/workflows/cd.yml). Together they enforce **9 sequential security gates** before any code reaches production. Every `git push` to the `main` or `devsecops` branch triggers the full pipeline automatically.
+The DevSecOps lifecycle is orchestrated through the [DevSecOps Main Pipeline](.github/workflows/devsecops-main.yml), which securely sequences three modular workflows: [CI](.github/workflows/ci.yml), [Build](.github/workflows/build.yml), and [CD](.github/workflows/cd.yml). Together they enforce **9 sequential security gates** before any code reaches production. Every `git push` to the `main` or `aws` branch triggers the full pipeline automatically.
 
 | Gate | Job | Tool | Action |
 | :---: | :--- | :--- | :--- |
@@ -300,12 +331,10 @@ All scan reports (OWASP, Trivy, ZAP) are uploaded as downloadable **Artifacts** 
 - **Database Connectivity**: 
 
   ```bash
-  docker exec -it db mysql -u <USER> -p bankappdb -e "SELECT * FROM accounts;"
+  mysql -h <RDS-ENDPOINT> -u <USER> -p bankappdb -e "SELECT * FROM accounts;"
   ```
 
   ![mysql-result](screenshots/17.png)
-
-  > **ZAP** is automatically created by **DAST - OWASP ZAP Baseline Scan** job in [cd.yml](.github/workflows/cd.yml). Read more about it(How, Why it does) on google...
 
 - **Network Validation**: 
 
