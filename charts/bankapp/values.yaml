@@ -1,0 +1,60 @@
+# Default values for bankapp.
+# This is a YAML-formatted file.
+
+replicaCount: 1
+
+image:
+  repository: "amitabhdevops/devsecops-bankapp"  # Your Docker Hub repo URI
+  pullPolicy: IfNotPresent
+  tag: "a4feabc43d587ed593b71c3f6c88539d73c5274d"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+database:
+  host: "db-service"
+  port: 3306
+  name: "bankapp"
+  user: "bankuser"
+  password: "" # To be provided from Secrets
+
+ai:
+  timeoutConnectMs: 3000
+  timeoutReadMs: 30000
+
+gemini:
+  model: "gemini-3-flash-preview"
+  maxOutputTokens: 512
+  apiUrl: "https://generativelanguage.googleapis.com/v1beta/models"
+
+gateway:
+  name: "bankapp-gateway"
+  className: "envoy" # Envoy Gateway Controller
+  host: "54.91.43.65.nip.io" # Update with your nip.io host (e.g., <PUBLIC_IP>.nip.io)
+  envoyProxy:
+    name: "bankapp-proxy-config"
+    serviceType: NodePort
+    nodePorts:
+      http: 30080
+      https: 30443
+  tls:
+    enabled: true
+    secretName: "bankapp-tls"
+    certManager:
+      enabled: true
+      issuerName: "letsencrypt-prod"
+      email: "amitabhdevops2004@gmail.com" # Update with your email for cert-manager notifications
+
+nginx:
+  enabled: true
+  image: nginx:latest
+  port: 80
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi

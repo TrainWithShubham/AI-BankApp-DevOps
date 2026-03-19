@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bankapp.fullname" . }}
+  labels:
+    {{- include "bankapp.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "bankapp.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "bankapp.selectorLabels" . | nindent 8 }}
+    spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.28
+          command: ['sh', '-c', "until nc -zv {{ .Values.database.host }} 3306; do echo waiting for mysql; sleep 2; done;"]
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            allowPrivilegeEscalation: false
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: MYSQL_HOST
+              value: {{ .Values.database.host | quote }}
+            - name: MYSQL_PORT
+              value: {{ .Values.database.port | quote }}
+            - name: MYSQL_DATABASE
+              value: {{ .Values.database.name | quote }}
+            - name: MYSQL_USER
+              value: {{ .Values.database.user | quote }}
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bankapp-db-secrets
+                  key: password
+            - name: AI_TIMEOUT_CONNECT_MS
+              value: {{ .Values.ai.timeoutConnectMs | quote }}
+            - name: AI_TIMEOUT_READ_MS
+              value: {{ .Values.ai.timeoutReadMs | quote }}
+            - name: GEMINI_MODEL
+              value: {{ .Values.gemini.model | quote }}
+            - name: GEMINI_MAX_OUTPUT_TOKENS
+              value: {{ .Values.gemini.maxOutputTokens | quote }}
+            - name: GEMINI_API_URL
+              value: {{ .Values.gemini.apiUrl | quote }}
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: bankapp-ai-secrets
+                  key: gemini-api-key
+                  optional: true
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            initialDelaySeconds: 30
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

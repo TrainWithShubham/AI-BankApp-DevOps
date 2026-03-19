@@ -1,0 +1,33 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ include "bankapp.fullname" . }}-http-route
+spec:
+  hostnames:
+    - {{ .Values.gateway.host | quote }}
+  parentRefs:
+    - name: {{ .Values.gateway.name }}
+      sectionName: http
+    - name: {{ .Values.gateway.name }}
+      sectionName: https
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /nginx
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: {{ include "bankapp.fullname" . }}-nginx
+          port: {{ .Values.nginx.port }}
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: {{ include "bankapp.fullname" . }}
+          port: {{ .Values.service.port }}

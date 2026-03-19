@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "bankapp.fullname" . }}-tls
+spec:
+  secretName: {{ .Values.gateway.tls.secretName }}
+  commonName: {{ .Values.gateway.host | quote }}
+  dnsNames:
+    - {{ .Values.gateway.host | quote }}
+  issuerRef:
+    name: {{ .Values.gateway.tls.certManager.issuerName }}
+    kind: Issuer

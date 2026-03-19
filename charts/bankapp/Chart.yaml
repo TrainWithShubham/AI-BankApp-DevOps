@@ -1,0 +1,6 @@
+apiVersion: v2
+name: bankapp
+description: A Helm chart for DevSecOps Bankapp on EKS with Gateway API
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

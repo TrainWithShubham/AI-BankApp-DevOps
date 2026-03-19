@@ -4,7 +4,6 @@ on:
   workflow_call:
 
 permissions:
-  id-token: write  # Required for OIDC
   contents: read
 
 jobs:
@@ -77,31 +76,27 @@ jobs:
           path: trivy-report.txt
 
   # ============================================================
-  # GATE 7: PUSH TO ECR
+  # GATE 7: PUSH TO DOCKER HUB
   # ============================================================
-  push_to_ecr:
-    name: Push to ECR
+  push_to_dockerhub:
+    name: Push to Docker Hub
     runs-on: ubuntu-latest
     needs: image_scan
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build, Tag, and Push Image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          DOCKERHUB_REPO: ${{ secrets.DOCKERHUB_REPO }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build --pull -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build --pull -t $DOCKERHUB_REPO:$IMAGE_TAG .
+          docker push $DOCKERHUB_REPO:$IMAGE_TAG
+

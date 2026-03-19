@@ -1,0 +1,30 @@
+# Exclude non-essential files from Docker build context
+# This speeds up builds and reduces the attack surface
+
+# Kubernetes/Helm/GitOps (not needed in image)
+charts/
+gitops/
+scripts/
+
+# Documentation and screenshots
+screenshots/
+*.md
+HELP.md
+
+# CI/CD configs
+.github/
+
+# Build output (will be rebuilt inside Docker)
+target/
+
+# IDE and OS files
+.idea/
+.vscode/
+*.iml
+*.iws
+.git/
+
+# Local dev files
+docker-compose.yml
+app-tier.yml
+.env

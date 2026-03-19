@@ -21,7 +21,7 @@ services:
       retries: 5
 
   bankapp:
-    image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+    image: ${DOCKERHUB_REPO}:${IMAGE_TAG}
     container_name: bankapp
     ports:
       - "8080:8080"
@@ -31,7 +31,10 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      OLLAMA_URL: ${OLLAMA_URL}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3-flash-preview}
+      GEMINI_API_URL: ${GEMINI_API_URL:-https://generativelanguage.googleapis.com/v1beta/models}
+      GEMINI_MAX_OUTPUT_TOKENS: ${GEMINI_MAX_OUTPUT_TOKENS:-512}
     depends_on:
       db:
         condition: service_healthy

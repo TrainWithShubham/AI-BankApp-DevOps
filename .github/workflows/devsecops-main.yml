@@ -2,7 +2,7 @@ name: DevSecOps Main Pipeline
 
 on:
   push:
-    branches: [ main, devsecops, k8s ]
+    branches: [ main ]
     paths-ignore:
       - '**.md'
       - '.gitignore'
@@ -11,8 +11,7 @@ on:
       - 'scripts/**'
 
 permissions:
-  id-token: write
-  contents: read
+  contents: write  # Required: cd.yml pushes updated values.yaml back to repo (workflow_call inherits this)
   security-events: write
 
 jobs:
@@ -24,7 +23,7 @@ jobs:
     secrets: inherit
 
   # ============================================================
-  # STAGE 2: Build - Maven + Trivy + ECR Push
+  # STAGE 2: Build - Maven + Trivy + Docker Hub Push
   # ============================================================
   build:
     needs: ci
@@ -32,7 +31,7 @@ jobs:
     secrets: inherit
 
   # ============================================================
-  # STAGE 3: CD - Deploy + DAST
+  # STAGE 3: CD - GitOps Sync (ArgoCD)
   # ============================================================
   cd:
     needs: build
