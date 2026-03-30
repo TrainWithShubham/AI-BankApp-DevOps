@@ -34,9 +34,9 @@ jobs:
             push: true
             tags:  |
 
-              ${{vars.DOCKER_USERNAME}}/ai-bankapp:${{github.ref_name}}
-              ${{vars.DOCKER_USERNAME}}/ai-bankapp:latest
-              ${{vars.DOCKER_USERNAME}}/ai-bankapp:${{github.sha}}
+              ${{secrets.DOCKER_USERNAME}}/ai-bankapp:${{github.ref_name}}
+              ${{secrets.DOCKER_USERNAME}}/ai-bankapp:latest
+              ${{secrets.DOCKER_USERNAME}}/ai-bankapp:${{github.sha}}
 
 
            
