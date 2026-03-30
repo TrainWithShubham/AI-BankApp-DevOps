@@ -3,7 +3,7 @@ name: Docker Build & Push
 on:
   push:
     branches: [main]
-
+  workflow_dispatch: 
 jobs:
     build-and-push:
       runs-on: ubuntu-latest
