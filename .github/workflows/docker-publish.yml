@@ -19,11 +19,7 @@ jobs:
             java-version: '21'
 
         - name: Build Jar
-          run: mvn clean package -Dmaven.test.skip=true
-
-        - name: Show Surefire Reports on Failure
-          if: failure()
-          run: find . -name "*.txt" -path "*/surefire-reports/*" -exec cat {} \;
+          run: mvn clean package
 
         - name: Login to Docker hub
           uses: docker/login-action@v3
