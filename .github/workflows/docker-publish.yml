@@ -20,7 +20,7 @@ jobs:
             java-version: '21'
 
         - name: Build Jar
-          run: mvn clean package -DskipTests=true
+          run: mvn clean package -Dmaven.test.skip=true
 
         - name: Login to Docker hub
           uses: docker/login-action@v3
