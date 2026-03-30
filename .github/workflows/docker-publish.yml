@@ -2,15 +2,21 @@ name: Docker Build & Push
 
 on:
   push:
-    branches: [main, origin, start]
+    branches: [main]
 
 jobs:
-    build-and-push:
+    build-&-push:
       runs-on: ubuntu-latest
 
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
+
+        - name: Set up Java
+          uses: actions/setup-java@v4
+          with:
+            distribution: 'temurin'
+            java-version: '21'
 
         - name: Build Jar
           run: mvn clean package
@@ -31,5 +37,3 @@ jobs:
               ${{vars.DOCKER_USERNAME}}/ai-bankapp:${{github.ref_name}}
               ${{vars.DOCKER_USERNAME}}/ai-bankapp:latest
               ${{vars.DOCKER_USERNAME}}/ai-bankapp:${{github.sha}}
-
-
