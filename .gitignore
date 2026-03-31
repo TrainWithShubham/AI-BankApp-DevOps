@@ -34,3 +34,10 @@ build/
 
 ### Claude ###
 CLAUDE.md
+
+##Terrform ##
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup

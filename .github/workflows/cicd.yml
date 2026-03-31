@@ -1,0 +1,144 @@
+name: CI-CD-bankapp
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-test-scan-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Java 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '21'
+
+    - name: Cache Maven Dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: maven-${{ hashFiles('**/pom.xml') }}
+
+    - name: Build and Test
+      run: ./mvnw clean verify
+
+    - name: Run Trivy FS Scan
+      uses: aquasecurity/trivy-action@0.35.0
+      with:
+        scan-type: fs
+        format: table
+        exit-code: '0'
+        severity: CRITICAL,HIGH
+
+    - name: Clean project
+      run: ./mvnw clean
+
+    - name: Build Docker Image
+      run: |
+        docker build --no-cache -t ${{ vars.DOCKER_USERNAME }}/bankapp:${{ github.sha }} .
+        docker tag sachin8801/bankapp:${{ github.sha }} sachin8801/bankapp:v1
+
+    - name: Run Trivy Image Scan
+      uses: aquasecurity/trivy-action@0.35.0
+      with:
+        image-ref: ${{ vars.DOCKER_USERNAME }}/bankapp:${{ github.sha }}
+        format: table
+        exit-code: '0'
+        severity: CRITICAL,HIGH
+
+    - name: Docker Hub Login
+      uses: docker/login-action@v3
+      with:
+        username: ${{ vars.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push Docker Image
+      run: |
+        docker push ${{ vars.DOCKER_USERNAME }}/bankapp:${{ github.sha }}
+        docker push sachin8801/bankapp:v1
+      
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+
+    - name: Terraform Init
+      working-directory: terraform
+      run: terraform init
+    - name: Terraform Apply
+      working-directory: terraform
+      run: terraform apply -auto-approve
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    - name: Get Public IP
+      id: tf
+      working-directory: terraform
+      run: echo "ip=$(terraform output -raw public_ip)" >> $GITHUB_OUTPUT
+
+    - name: Setup SSH
+      run: |
+        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+        chmod 400 key.pem
+        
+    - name: Fetch kubeconfig
+      run: |
+        sleep 60
+
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ steps.tf.outputs.ip }} \
+        "sudo cat /etc/rancher/k3s/k3s.yaml" > kubeconfig
+
+        sed -i "s/127.0.0.1/${{ steps.tf.outputs.ip }}/g" kubeconfig
+        sed -i 's/certificate-authority-data:/#certificate-authority-data:/g' kubeconfig
+        sed -i 's/server: https:/insecure-skip-tls-verify: true\n    server: https:/g' kubeconfig
+
+        mkdir -p $HOME/.kube
+        mv kubeconfig $HOME/.kube/config
+    # 1. Namespace FIRST
+    - name: Deploy Namespace
+      run: kubectl apply -f setup-k8s/namespace.yaml --validate=false
+
+    # 2. Core configs
+    - name: Deploy Secrets
+      run: kubectl apply -f setup-k8s/secrets.yaml --validate=false
+
+    - name: Deploy ConfigMap
+      run: kubectl apply -f setup-k8s/configmap.yaml --validate=false
+
+    # 3. Database layer
+    - name: Deploy MySQL
+      run: |
+        kubectl apply -f setup-k8s/mysql/pvc.yaml --validate=false
+        kubectl apply -f setup-k8s/mysql/deployment.yaml --validate=false
+        kubectl apply -f setup-k8s/mysql/service.yaml --validate=false
+
+    # Wait for DB to be ready (CRITICAL)
+    - name: Wait for MySQL
+      run: kubectl rollout status deployment/mysql-deployment -n bank-app
+      
+    # 3. Deploy Ollama- AI Tiny Lama 
+    - name: Deploy Ollama
+      run: |
+        kubectl apply -f setup-k8s/ollama/deployment.yaml --validate=false
+        kubectl apply -f setup-k8s/ollama/service.yaml --validate=false
+
+    # Wait for Ollama to be ready (CRITICAL)
+    - name: Wait for Ollama
+      run: kubectl rollout status deployment/ollama -n bank-app
+      
+    # 5. Frontend layer
+    - name: Deploy Frontend
+      run: |
+        kubectl apply -f setup-k8s/bank-app/deployment.yaml --validate=false
+        kubectl apply -f setup-k8s/bank-app/service.yaml --validate=false
+
+    - name: Verify
+      run: kubectl rollout status deployment/bankapp-deployment -n bank-app
+      

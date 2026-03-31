@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bankapp-deployment
+  namespace: bank-app
+  labels:
+    app: bankapp
+    tier: backend
+
+spec:
+  replicas: 2
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  selector:
+    matchLabels:
+      app: bankapp
+
+  template:
+    metadata:
+      labels:
+        app: bankapp
+
+    spec:
+      containers:
+      - name: bankapp
+        image: sachin8801/bankapp:v1
+        imagePullPolicy: Always
+
+        ports:
+          - containerPort: 8080
+
+        env:
+          - name: MYSQL_HOST
+            value: mysql-service
+
+          - name: MYSQL_PORT
+            value: "3306"
+
+          - name: MYSQL_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: bankapp-configmap
+                key: MYSQL_DATABASE
+
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: bankapp-secrets
+                key: MYSQL_USER
+
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: bankapp-secrets
+                key: MYSQL_PASSWORD
+
+          - name: OLLAMA_URL
+            value: http://ollama-service:11434
+
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+
+        startupProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          failureThreshold: 30
+          periodSeconds: 10
+
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 40
+          periodSeconds: 10
+
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
