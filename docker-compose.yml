@@ -1,0 +1,46 @@
+#docker build and run the application using docker-compose
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: bankapp
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pTest@123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - bankapp_network
+  bankapp:
+    build: .
+    container_name: bankapp
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: bankapp
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Test@123
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bankapp_network
+
+#docker network create 
+networks:
+    bankapp_network:
+      driver: bridge
+
+#docker volume create
+volumes:
+  mysql_data:
+

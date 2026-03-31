@@ -21,8 +21,10 @@
 # Stage 1: Build
 FROM eclipse-temurin:21-jdk-jammy AS builder
 WORKDIR /app
-COPY mvnw pom.xml ./
+COPY pom.xml ./
 COPY .mvn ./.mvn
+COPY mvnw ./
+RUN dos2unix mvnw || sed -i 's/\r$//' mvnw
 RUN chmod +x mvnw && ./mvnw dependency:resolve
 COPY src ./src
 RUN ./mvnw clean package -DskipTests -B
