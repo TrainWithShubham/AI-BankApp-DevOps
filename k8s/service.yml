@@ -26,7 +26,7 @@ metadata:
   name: bankapp-service
   namespace: bankapp
 spec:
-  type: NodePort
+  type: ClusterIP
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:
@@ -35,4 +35,4 @@ spec:
     app: bankapp
   ports:
     - port: 8080
-      nodePort: 30080
+      targetPort: 8080

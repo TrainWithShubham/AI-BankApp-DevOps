@@ -32,5 +32,11 @@ build/
 ### VS Code ###
 .vscode/
 
+### Terraform ###
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfplan
+
 ### Claude ###
 CLAUDE.md
