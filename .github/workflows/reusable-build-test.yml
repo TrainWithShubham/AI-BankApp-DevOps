@@ -1,0 +1,49 @@
+name: Reusable Build Test Workflow
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        description: 'The version of Java to use for the build'
+        required: true
+        type: string
+      runs_tests:
+        description: 'Whether to run tests'
+        required: false
+        type: boolean 
+        default: true
+    outputs:
+      test-result:
+        description: 'The result of the test process'
+        value: ${{ jobs.build.outputs.test-result }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      test-result: ${{ steps.test.outputs.result }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java ${{ inputs.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ inputs.java-version }}
+          distribution: 'temurin'
+
+      - name: Build with maven
+        run: mvn clean install -DskipTests
+
+      - name: Run test script
+        id: test
+        if: ${{ inputs.runs_tests }}
+        run: |
+          chmod +x ./test.sh
+          if ./test.sh; then
+            
+            echo "result=passed" >> $GITHUB_OUTPUT
+          else
+            
+            echo "result=failed" >> $GITHUB_OUTPUT
+          fi
+
+          
