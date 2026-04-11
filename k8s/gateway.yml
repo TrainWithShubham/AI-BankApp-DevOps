@@ -35,7 +35,9 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - name: bankapp-tls
+          - group: ""
+            kind: Secret
+            name: bankapp-tls
       allowedRoutes:
         namespaces:
           from: Same
