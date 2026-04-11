@@ -2,14 +2,34 @@
 
 ![Docker Build & Push](https://github.com/Sana-2026/AI-BankApp-DevOps/actions/workflows/docker-publish.yml/badge.svg)
 
-A Spring Boot banking application used as a base for learning end-to-end DevOps — from Docker to Kubernetes to GitOps.
+A production-ready full-stack banking application built with Spring Boot and MySQL, featuring secure authentication, account management, and transaction processing. Integrated with a complete DevOps pipeline using Docker, GitHub Actions CI/CD, Kubernetes, Helm, Terraform, Prometheus, and ArgoCD for scalable, automated, and observable deployments.
 
-## Tech Stack
-- **Backend:** Spring Boot 3.4.1, Java 21, Spring Security, JPA/Hibernate
-- **Frontend:** Thymeleaf, Bootstrap 5, Glassmorphism UI with dark/light theme
-- **Database:** MySQL 8.0
-- **AI:** Ollama (self-hosted LLM chatbot, zero cost)
-- **DevOps:** Docker, GitHub Actions, Kubernetes, Helm, Terraform, Prometheus, Grafana, ArgoCD
+<img width="1355" height="635" alt="dashboard-app" src="https://github.com/user-attachments/assets/78a0e023-bfab-4b2e-907d-d1f746a989ac" />
+
+## 🏗️ Architecture 
+
+A cloud-native AI banking application built with Spring Boot, containerized using Docker, and deployed via GitHub Actions CI/CD. It leverages Kubernetes for scalability, ArgoCD for GitOps, and Prometheus & Grafana for monitoring.
+
+![architecture](https://github.com/user-attachments/assets/3daa07a3-51b6-4918-b87f-63cb48d7a278)
+
+---
+## 🧰 Tech Stack
+
+| Category        | Technologies |
+|----------------|-------------|
+| **Backend**     | Spring Boot 3.4.1, Java 21, Spring Security, JPA/Hibernate |
+| **Frontend**    | Thymeleaf, Bootstrap 5, Glassmorphism UI (Dark/Light Theme) |
+| **Database**    | MySQL 8.0 |
+| **AI**          | Ollama (Self-hosted LLM chatbot) |
+| **Containerization** | Docker |
+| **CI/CD**       | GitHub Actions |
+| **Orchestration** | Kubernetes |
+| **Package Management** | Helm |
+| **Infrastructure as Code** | Terraform |
+| **Monitoring**  | Prometheus, Grafana |
+| **GitOps**      | ArgoCD |
+
+---
 
 ## Branches
 | Branch | Description |
@@ -19,7 +39,6 @@ A Spring Boot banking application used as a base for learning end-to-end DevOps 
 | `ai` | Adds AI chatbot powered by Ollama |
 | `main` | End-to-end DevOps (WIP) |
 
-See [ROADMAP.md](ROADMAP.md) for the full progression.
 
 ## Quick Start
 
@@ -59,3 +78,21 @@ docker exec bankapp-ollama ollama pull tinyllama
 - AI chatbot that knows your balance and recent transactions
 - Prometheus metrics at `/actuator/prometheus`
 - Health check at `/actuator/health`
+
+- ## 🚀 Future Enhancements
+
+* Kubernetes auto-deployment with Helm
+* GitOps using ArgoCD
+* Terraform-based infrastructure provisioning
+* Advanced AI banking features
+
+---
+
+## 👨‍💻 Author
+
+Sana Shaik
+
+---
+
+🔥 Built as part of DevOps Capstone Project
+
