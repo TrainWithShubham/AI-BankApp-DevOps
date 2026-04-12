@@ -24,6 +24,7 @@ spec:
     - name: http
       protocol: HTTP
       port: 80
+      hostname: 3.209.236.187.nip.io
       allowedRoutes:
         namespaces:
           from: All
