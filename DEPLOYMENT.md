@@ -24,7 +24,7 @@ terraform apply
 ## Step 2: Configure kubectl
 
 ```bash
-aws eks update-kubeconfig --name bankapp-eks --region us-west-2
+aws eks update-kubeconfig --name bankapp-eks --region us-east-1
 kubectl get nodes
 # Should show 3 nodes in Ready state
 ```

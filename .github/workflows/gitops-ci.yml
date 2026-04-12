@@ -12,8 +12,8 @@ on:
 permissions:
   contents: write
 
-env:
-  DOCKERHUB_REPO: trainwithshubham/ai-bankapp-eks
+# env:
+#   DOCKERHUB_REPO: trainwithshubham/ai-bankapp-eks
 
 jobs:
   build-and-push:
@@ -62,14 +62,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Update Kubernetes deployment manifest
-        run: |
-          sed -i "s|image: ${{ env.DOCKERHUB_REPO }}:.*|image: ${{ env.DOCKERHUB_REPO }}:${{ steps.tag.outputs.sha_short }}|" k8s/bankapp-deployment.yml
+      # - name: Update Kubernetes deployment manifest
+      #   run: |
+      #     sed -i "s|image: ${{ env.DOCKERHUB_REPO }}:.*|image: ${{ env.DOCKERHUB_REPO }}:${{ steps.tag.outputs.sha_short }}|" k8s/bankapp-deployment.yml
 
-      - name: Commit updated manifest
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add k8s/bankapp-deployment.yml
-          git diff --staged --quiet || git commit -m "ci: update bankapp image to ${{ steps.tag.outputs.sha_short }} [skip ci]"
-          git push
+      # - name: Commit updated manifest
+      #   run: |
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
+      #     git add k8s/bankapp-deployment.yml
+      #     git diff --staged --quiet || git commit -m "ci: update bankapp image to ${{ steps.tag.outputs.sha_short }} [skip ci]"
+      #     git push
