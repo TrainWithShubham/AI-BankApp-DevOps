@@ -3,10 +3,10 @@ name: GitOps CI - Build & Push to DockerHub
 on:
   push:
     branches: [feat/gitops]
-    paths:
-      - 'src/**'
-      - 'pom.xml'
-      - 'Dockerfile'
+    # paths:
+    #   - 'src/**'
+    #   - 'pom.xml'
+    #   - 'Dockerfile'
   workflow_dispatch:
 
 permissions:

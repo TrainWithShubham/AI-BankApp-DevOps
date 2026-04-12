@@ -124,7 +124,7 @@ kubectl get secret kube-prometheus-grafana -n monitoring \
 > CI does this automatically on push to `feat/gitops`. This step is only needed for the **first deploy** (image doesn't exist on DockerHub yet).
 
 ```bash
-# IMPORTANT: EKS runs amd64 nodes. If building on Apple Silicon (M1/M2/M3),
+# IMPORTANT: EKS runs amd64 nodes. If building on Apple Silicon (M1/M2/M3)
 # you MUST specify --platform linux/amd64 or pods will fail with:
 #   "no match for platform in manifest: not found"
 
