@@ -12,8 +12,8 @@ on:
 permissions:
   contents: write
 
-# env:
-#   DOCKERHUB_REPO: trainwithshubham/ai-bankapp-eks
+env:
+  DOCKERHUB_REPO: sanketdangat11/ai-bankapp-eks
 
 jobs:
   build-and-push:
