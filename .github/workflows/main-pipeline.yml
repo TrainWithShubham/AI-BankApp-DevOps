@@ -27,7 +27,7 @@ jobs:
     secrets: inherit
 
   deploy:
-    needs: [call-reusable-build-test, call-reusable-docker]
+    needs: [call-reusable-build-test, call-reusable-docker-latest, call-reusable-docker-sha]
     runs-on: ubuntu-latest
     environment: production
     steps:
