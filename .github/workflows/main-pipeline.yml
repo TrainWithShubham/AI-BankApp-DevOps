@@ -9,12 +9,20 @@ jobs:
       java-version: 21
       runs_tests: true
 
-  call-reusable-docker:
+  call-reusable-docker-latest:
     needs: call-reusable-build-test
     uses: ./.github/workflows/reusable-docker.yml
     with:
-      image-tag: ${{ github.sha::8 }}
+      image-name: ${{github.repository}}
       image-tag: latest
+    secrets: inherit
+
+  call-reusable-docker-sha:
+    needs: call-reusable-build-test
+    uses: ./.github/workflows/reusable-docker.yml
+    with:
+      image-name: ${{github.repository}}
+      image-tag: sha-${{ github.sha }}
     secrets: inherit
 
   deploy:
@@ -27,4 +35,4 @@ jobs:
           echo "Deploying application with Docker image: ${{ needs.call-reusable-docker.outputs.image_url }}"
           echo "Test result from build and test workflow: ${{ needs.call-reusable-build-test.outputs.test-result }}"  
       
-           
+            
