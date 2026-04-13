@@ -9,7 +9,7 @@ jobs:
       uses: ./.github/workflows/reusable-build-test.yml
       with:
         java-version: '21'
-        run_tests: true
+        runs_tests: true
 
    pr-comment:
      runs-on: ubuntu-latest
