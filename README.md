@@ -104,3 +104,4 @@ test main pr pipeline-round 4
 test main pr pipeline-round 5
 test main pr pipeline-round 6
 test main pr pipeline-round 7
+test main pr pipeline-round 8
