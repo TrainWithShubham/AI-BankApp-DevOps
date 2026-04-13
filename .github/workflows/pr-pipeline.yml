@@ -1,7 +1,7 @@
 name: PR Pipeline 
 on:
   pull_request:
-    branches: [main]
+    branches: [start]
     types: ['opened', 'synchronize']
 
 jobs:

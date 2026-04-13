@@ -96,4 +96,6 @@ Sana Shaik
 
 🔥 Built as part of DevOps Capstone Project
 
+<<<<<<< HEAD
 Final trigger
+=======
