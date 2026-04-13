@@ -1,6 +1,7 @@
 name: Main Pipeline
 on: 
-  push: [start]
+  push:
+    branches: [start]
 
 jobs:
   call-reusable-build-test:
