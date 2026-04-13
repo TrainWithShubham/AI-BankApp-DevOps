@@ -14,7 +14,7 @@ jobs:
     needs: call-reusable-build-test
     uses: ./.github/workflows/reusable-docker.yml
     with:
-      image-name: ${{ github.repository }}
+      image-name: ${{ github.repository -lower }}/ai-bankapp-devops
       image-tag: latest
     secrets: inherit
 
@@ -22,7 +22,7 @@ jobs:
     needs: call-reusable-build-test
     uses: ./.github/workflows/reusable-docker.yml
     with:
-      image-name: ${{ github.repository }}
+      image-name: ${{ github.repository -lower }}/ai-bankapp-devops
       image-tag: sha-${{ github.sha }}
     secrets: inherit
 
