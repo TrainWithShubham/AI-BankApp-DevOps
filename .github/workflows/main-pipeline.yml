@@ -1,39 +1,41 @@
 name: Main Pipeline
-on: 
+
+on:
   push:
     branches: [start]
 
 jobs:
   call-reusable-build-test:
     uses: ./.github/workflows/reusable-build-test.yml
-    with: 
-      java-version: 21
+    with:
+      java-version: '21'
       runs_tests: true
 
-  call-reusable-docker-latest:
-    needs: call-reusable-build-test
-    uses: ./.github/workflows/reusable-docker.yml
-    with:
-      image-name: ${{ github.repository | lower }}/ai-bankapp-devops
-      image-tag: latest
-    secrets: inherit
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      image-name: ${{ steps.prep.outputs.image-name }}
+      short-sha: ${{ steps.prep.outputs.short-sha }}
+    steps:
+      - name: Prepare image details
+        id: prep
+        run: |
+          echo "image-name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+          echo "short-sha=sha-${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
 
-  call-reusable-docker-sha:
-    needs: call-reusable-build-test
+  call-reusable-docker:
+    needs: [call-reusable-build-test, prepare]
     uses: ./.github/workflows/reusable-docker.yml
     with:
-      image-name: ${{ github.repository | lower }}/ai-bankapp-devops
-      image-tag: sha-${{ github.sha }}
+      image-name: ${{ needs.prepare.outputs.image-name }}
+      image-tag: ${{ needs.prepare.outputs.short-sha }}
     secrets: inherit
 
   deploy:
-    needs: [call-reusable-build-test, call-reusable-docker-latest, call-reusable-docker-sha]
+    needs: [call-reusable-docker, prepare]
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: print deployment info
+      - name: Deploy to production
         run: |
-          echo "Deploying application with Docker image: ${{ needs.call-reusable-docker.outputs.image_url }}"
-          echo "Test result from build and test workflow: ${{ needs.call-reusable-build-test.outputs.test-result }}"  
-      
-            
+          echo "Deploying image: ${{ needs.prepare.outputs.image-name }}:${{ needs.prepare.outputs.short-sha }} to production"
