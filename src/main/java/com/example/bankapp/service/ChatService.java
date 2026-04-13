@@ -30,26 +30,21 @@ public class ChatService {
         String context = buildContext(account, recent);
 
         Map<String, Object> request = Map.of(
-            "model", model,
-            "messages", List.of(
-                Map.of("role", "system", "content", context),
-                Map.of("role", "user", "content", userMessage)
-            ),
-            "stream", false
+        "model", model,
+        "prompt", context + "\nUser: " + userMessage,
+        "stream", false
         );
 
         try {
             Map<String, Object> response = restTemplate.postForObject(
-                ollamaUrl + "/api/chat", request, Map.class
+                 ollamaUrl + "/api/generate", request, Map.class
             );
-            if (response != null && response.containsKey("message")) {
-                Map<String, String> message = (Map<String, String>) response.get("message");
-                return message.get("content");
+            if (response != null && response.containsKey("response")) {
+                return (String) response.get("response");
             }
             return "Sorry, I couldn't process that.";
         } catch (Exception e) {
-            return "AI assistant is unavailable. Please make sure Ollama is running.";
-        }
+            e.printStackTrace();
     }
 
     private String buildContext(Account account, List<Transaction> transactions) {
