@@ -1,0 +1,30 @@
+name: Main Pipeline
+on: 
+  push: [start]
+
+jobs:
+  call-reusable-build-test:
+    uses: ./.github/workflows/reusable-build-test.yml
+    with: 
+      java-version: 21
+      runs_tests: true
+
+  call-reusable-docker:
+    needs: call-reusable-build-test
+    uses: ./.github/workflows/reusable-docker.yml
+    with:
+      image-tag: ${{ github.sha::8 }}
+      image-tag: latest
+    secrets: inherit
+
+  deploy:
+    needs: [call-reusable-build-test, call-reusable-docker]
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: print deployment info
+        run: |
+          echo "Deploying application with Docker image: ${{ needs.call-reusable-docker.outputs.image_url }}"
+          echo "Test result from build and test workflow: ${{ needs.call-reusable-build-test.outputs.test-result }}"  
+      
+           
