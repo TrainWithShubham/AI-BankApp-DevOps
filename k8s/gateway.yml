@@ -24,7 +24,7 @@ spec:
     - name: http
       protocol: HTTP
       port: 80
-      hostname: 98.84.79.205.nip.io
+      hostname: 54.163.144.219.nip.io
       allowedRoutes:
         namespaces:
           from: All
@@ -32,7 +32,7 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: 98.84.79.205.nip.io
+      hostname: 54.163.144.219.nip.io
       tls:
         mode: Terminate
         certificateRefs:
@@ -50,7 +50,7 @@ metadata:
   namespace: bankapp
 spec:
   hostnames:
-    - 98.84.79.205.nip.io
+    - 54.163.144.219.nip.io
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
