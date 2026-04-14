@@ -50,7 +50,7 @@ metadata:
   namespace: bankapp
 spec:
   hostnames:
-    - 3.209.236.187.nip.io
+    - 3.210.168.114.nip.io
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
