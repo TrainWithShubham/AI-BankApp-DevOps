@@ -1,0 +1,43 @@
+name: Health Check workflow
+on:
+  schedule:
+    -cron: '0 */12 * * *' # Runs every 12 hours
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull the latest docker image
+          run: docker pull sana2026/ai-bankapp-devops:latest
+
+      - name: Run container in detached mode
+        run: docker run -d --name health-check-container -p 8080:8080 sana2026/ai-bankapp-devops:latest
+      
+      - name: Wait for the container to start
+        run: sleep 5 # Wait for 5 seconds to allow the container to start 
+
+      - name: Curl the health endpoint
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health)
+          if [ "$response" -ne 200 ]; then
+            echo "Health check failed with status code: $response"
+            exit 1
+          else
+            echo "Health check passed with status code: $response"
+          fi
+
+      - name: Stop and remove the container
+        if: always() # Ensure this step runs even if the previous step fails
+        run: |
+          docker stop health-check-container
+          docker rm health-check-container
+
+      - name: Write github step summary
+        if: success() # Only write summary if the health check passed 
+        run: |
+          echo "Health check Report" >> $GITHUB_STEP_SUMMARY
+          echo "- Image: myapp:latest" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: PASSED" >> $GITHUB_STEP_SUMMARY
+          echo "- Time: $(date)" >> $GITHUB_STEP_SUMMARY
+
