@@ -1,7 +1,7 @@
 name: Health Check workflow
 on:
   schedule:
-    -cron: '0 */12 * * *' # Runs every 12 hours
+    - cron: '0 */12 * * *' # Runs every 12 hours
   workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
