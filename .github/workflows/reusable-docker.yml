@@ -44,9 +44,14 @@ jobs:
       - name: Build and Push Docker image
         id: build
         run: |
-          docker build -t ${{ inputs.image-name }}:${{ inputs.image-tag }} .
+          docker build \
+            -t ${{ inputs.image-name }}:latest \
+            -t ${{ inputs.image-name }}:${{ inputs.image-tag }} .
+
+          docker push ${{ inputs.image-name }}:latest
           docker push ${{ inputs.image-name }}:${{ inputs.image-tag }}
-          echo "image-url=${{ inputs.image-name }}:${{ inputs.image-tag }}" >> $GITHUB_OUTPUT
+
+          echo "image_url=${{ inputs.image-name }}:${{ inputs.image-tag }}" >> $GITHUB_OUTPUT
           
     
 
