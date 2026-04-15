@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Pull the latest docker image
-          run: docker pull sana2026/ai-bankapp-devops:latest
+        run: docker pull sana2026/ai-bankapp-devops:latest
 
       - name: Run container in detached mode
         run: docker run -d --name health-check-container -p 8080:8080 sana2026/ai-bankapp-devops:latest
