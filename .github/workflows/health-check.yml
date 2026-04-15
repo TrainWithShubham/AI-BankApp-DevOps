@@ -15,7 +15,7 @@ jobs:
         run: docker run -d --name health-check-container -p 8080:8080 sana2026/ai-bankapp-devops:latest
       
       - name: Wait for the container to start
-        run: sleep 5 # Wait for 5 seconds to allow the container to start 
+        run: sleep 30 # Wait for 30 seconds to allow the container to start 
 
       - name: Curl the health endpoint
         run: |
@@ -37,7 +37,7 @@ jobs:
         if: success() # Only write summary if the health check passed 
         run: |
           echo "Health check Report" >> $GITHUB_STEP_SUMMARY
-          echo "- Image: myapp:latest" >> $GITHUB_STEP_SUMMARY
+          echo "- Image: sana2026/ai-bankapp-devops:latest" >> $GITHUB_STEP_SUMMARY
           echo "- Status: PASSED" >> $GITHUB_STEP_SUMMARY
           echo "- Time: $(date)" >> $GITHUB_STEP_SUMMARY
 
