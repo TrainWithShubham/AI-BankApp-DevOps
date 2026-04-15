@@ -20,7 +20,7 @@ jobs:
       - name: Prepare image details
         id: prep
         run: |
-          echo "image-name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+          echo "image-name=$sana2026/ai-bankapp-devops" >> $GITHUB_OUTPUT
           echo "short-sha=sha-${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
 
   call-reusable-docker:
