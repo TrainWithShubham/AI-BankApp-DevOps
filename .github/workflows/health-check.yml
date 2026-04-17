@@ -11,21 +11,57 @@ jobs:
       - name: Pull the latest docker image
         run: docker pull sana2026/ai-bankapp-devops:latest
 
+      - name: Create docker network
+        run: docker network create my-network # Create a network for the containers to communicate
+
+      - name: Run MySQL container
+        run: |
+          docker run -d \
+          --name mysql-container \
+          -e MYSQL_ROOT_PASSWORD=root123 \
+          -e MYSQL_DATABASE=bankappdb \
+          -p 3306:3306 mysql:latest \
+
+      - name: Wait for MySQL to initialize
+        run: sleep 30 # Wait for MySQL to initialize
+
       - name: Run container in detached mode
-        run: docker run -d --name health-check-container -p 8080:8080 sana2026/ai-bankapp-devops:latest
+        run: 
+          docker run -d \
+           --name health-check-container \
+           -p 8080:8080 \
+           -e MYSQL_HOST=mysql-db \
+           -e MYSQL_PORT=3306 \
+           -e MYSQL_DATABASE=bankappdb \
+           -e MYSQL_USER=root \
+           -e MYSQL_PASSWORD=root123 \
+           sana2026/ai-bankapp-devops:latest
       
       - name: Wait for the container to start
         run: sleep 30 # Wait for 30 seconds to allow the container to start 
 
       - name: Curl the health endpoint
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health)
-          if [ "$response" -ne 200 ]; then
-            echo "Health check failed with status code: $response"
-            exit 1
-          else
-            echo "Health check passed with status code: $response"
-          fi
+          URL="http://localhost:8080/actuator/health"
+
+          for i in {1..10}; do
+             echo "Attempt $i..."
+
+            response=$(curl -s -o /dev/null -w "%{http_code}" $URL || echo "000")
+
+            if [ "$response" = "200" ]; then
+               echo "✅ Health check passed"
+               exit 0
+            fi
+
+            echo "⏳ Waiting... (status: $response)"
+            sleep 5
+          done
+
+          echo "❌ Health check failed after retries"
+          docker ps
+          docker logs $(docker ps -q) || true
+          exit 1
 
       - name: Stop and remove the container
         if: always() # Ensure this step runs even if the previous step fails
