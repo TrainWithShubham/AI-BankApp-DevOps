@@ -18,17 +18,19 @@ jobs:
         run: |
           docker run -d \
           --name mysql-container \
+          --network my-network \
           -e MYSQL_ROOT_PASSWORD=root123 \
           -e MYSQL_DATABASE=bankappdb \
-          -p 3306:3306 mysql:latest \
+          mysql:latest 
 
       - name: Wait for MySQL to initialize
         run: sleep 30 # Wait for MySQL to initialize
 
       - name: Run container in detached mode
-        run: 
+        run: |
           docker run -d \
            --name health-check-container \
+           --network my-network \
            -p 8080:8080 \
            -e MYSQL_HOST=mysql-db \
            -e MYSQL_PORT=3306 \
