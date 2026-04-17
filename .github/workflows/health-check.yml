@@ -1,80 +1,111 @@
 name: Health Check workflow
+
 on:
   schedule:
-    - cron: '0 */12 * * *' # Runs every 12 hours
-  workflow_dispatch: # Allows manual triggering of the workflow
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
 
 jobs:
   health-check:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Pull the latest docker image
+      - name: Pull latest app image
         run: docker pull sana2026/ai-bankapp-devops:latest
 
-      - name: Create docker network
-        run: docker network create my-network # Create a network for the containers to communicate
+      - name: Create Docker network
+        run: docker network create my-network
 
+      # ---------------------------
+      # MySQL Container
+      # ---------------------------
       - name: Run MySQL container
         run: |
           docker run -d \
-          --name mysql-container \
-          --network my-network \
-          -e MYSQL_ROOT_PASSWORD=root123 \
-          -e MYSQL_DATABASE=bankappdb \
-          mysql:latest 
+            --name mysql-container \
+            --network my-network \
+            -e MYSQL_ROOT_PASSWORD=root123 \
+            -e MYSQL_DATABASE=bankappdb \
+            mysql:8.0
 
-      - name: Wait for MySQL to initialize
-        run: sleep 30 # Wait for MySQL to initialize
+      - name: Wait for MySQL to be ready
+        run: |
+          echo "Waiting for MySQL..."
+          for i in {1..12}; do
+            if docker exec mysql-container mysqladmin ping -h "localhost" --silent; then
+              echo "✅ MySQL is ready"
+              exit 0
+            fi
+            echo "⏳ Waiting for MySQL..."
+            sleep 5
+          done
+          echo "❌ MySQL failed to start"
+          docker logs mysql-container
+          exit 1
 
-      - name: Run container in detached mode
+      # ---------------------------
+      # App Container
+      # ---------------------------
+      - name: Run app container
         run: |
           docker run -d \
-           --name health-check-container \
-           --network my-network \
-           -p 8080:8080 \
-           -e MYSQL_HOST=mysql-db \
-           -e MYSQL_PORT=3306 \
-           -e MYSQL_DATABASE=bankappdb \
-           -e MYSQL_USER=root \
-           -e MYSQL_PASSWORD=root123 \
-           sana2026/ai-bankapp-devops:latest
-      
-      - name: Wait for the container to start
-        run: sleep 30 # Wait for 30 seconds to allow the container to start 
+            --name health-check-container \
+            --network my-network \
+            -p 8080:8080 \
+            -e MYSQL_HOST=mysql-container \
+            -e MYSQL_PORT=3306 \
+            -e MYSQL_DATABASE=bankappdb \
+            -e MYSQL_USER=root \
+            -e MYSQL_PASSWORD=root123 \
+            sana2026/ai-bankapp-devops:latest
 
+      - name: Wait for app to start
+        run: sleep 20
+
+      # ---------------------------
+      # Health Check
+      # ---------------------------
       - name: Curl the health endpoint
         run: |
           URL="http://localhost:8080/actuator/health"
 
-          for i in {1..10}; do
-             echo "Attempt $i..."
+          for i in {1..12}; do
+            echo "Attempt $i..."
 
             response=$(curl -s -o /dev/null -w "%{http_code}" $URL || echo "000")
 
             if [ "$response" = "200" ]; then
-               echo "✅ Health check passed"
-               exit 0
+              echo "✅ Health check passed"
+              exit 0
             fi
 
             echo "⏳ Waiting... (status: $response)"
             sleep 5
           done
 
-          echo "❌ Health check failed after retries"
-          docker ps
-          docker logs $(docker ps -q) || true
+          echo "❌ Health check failed"
+          docker ps -a
+          docker logs health-check-container || true
+          docker logs mysql-container || true
           exit 1
 
-      - name: Stop and remove the container
-        if: always() # Ensure this step runs even if the previous step fails
+      # ---------------------------
+      # Cleanup
+      # ---------------------------
+      - name: Cleanup containers
+        if: always()
         run: |
-          docker stop health-check-container
-          docker rm health-check-container
+          docker stop health-check-container mysql-container || true
+          docker rm health-check-container mysql-container || true
+          docker network rm my-network || true
 
-      - name: Write github step summary
-        if: success() # Only write summary if the health check passed 
+      # ---------------------------
+      # Summary
+      # ---------------------------
+      - name: Write GitHub Step Summary
+        if: success()
         run: |
-          echo "Health check Report" >> $GITHUB_STEP_SUMMARY
+          echo "## ✅ Health Check Report" >> $GITHUB_STEP_SUMMARY
           echo "- Image: sana2026/ai-bankapp-devops:latest" >> $GITHUB_STEP_SUMMARY
           echo "- Status: PASSED" >> $GITHUB_STEP_SUMMARY
           echo "- Time: $(date)" >> $GITHUB_STEP_SUMMARY
