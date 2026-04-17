@@ -1,9 +1,9 @@
 # AI-BankApp-DevOps
 
 ![Docker Build & Push](https://github.com/Sana-2026/AI-BankApp-DevOps/actions/workflows/docker-publish.yml/badge.svg)
-![PR Pipeline](https://github.com/Sana-2026/<repo-name>/actions/workflows/pr-pipeline.yml/badge.svg)
-![Main Pipeline](https://github.com/Sana-2026/<repo-name>/actions/workflows/main-pipeline.yml/badge.svg)
-![Health Check](https://github.com/Sana-2026/<repo-name>/actions/workflows/health-check.yml/badge.svg)
+![PR Pipeline](https://github.com/Sana-2026/AI-BankApp-DevOps/actions/workflows/pr-pipeline.yml/badge.svg)
+![Main Pipeline](https://github.com/Sana-2026/AI-BankApp-DevOps/actions/workflows/main-pipeline.yml/badge.svg)
+![Health Check](https://github.com/Sana-2026/AI-BankApp-DevOps/actions/workflows/health-check.yml/badge.svg)
 
 A production-ready full-stack banking application built with Spring Boot and MySQL, featuring secure authentication, account management, and transaction processing. Integrated with a complete DevOps pipeline using Docker, GitHub Actions CI/CD, Kubernetes, Helm, Terraform, Prometheus, and ArgoCD for scalable, automated, and observable deployments.
 
