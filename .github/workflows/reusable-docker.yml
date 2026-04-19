@@ -56,7 +56,7 @@ jobs:
 
           # 🔐 Trivy Scan Step (DevSecOps)
       - name: Scan Docker image with Trivy
-        uses: aquasecurity/trivy-action@v0
+        uses: aquasecurity/trivy-action@v0.35.0
         with:
           image-ref: ${{ inputs.image-name }}:${{ inputs.image-tag }}
           format: 'table'
