@@ -85,6 +85,32 @@
 		</dependency>
 	</dependencies>
 
+        
+      <dependencyManagement>
+    <dependencies>
+        <!-- Fix Tomcat -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>10.1.53</version>
+        </dependency>
+
+        <!-- Fix Spring Security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>6.4.6</version>
+        </dependency>
+
+        <!-- Fix Thymeleaf -->
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>3.1.4.RELEASE</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
 	<build>
 		<plugins>
 			<plugin>
