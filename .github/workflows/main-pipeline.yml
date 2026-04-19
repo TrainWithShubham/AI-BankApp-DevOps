@@ -51,7 +51,7 @@ jobs:
       - name: Send Slack notification
         run: |
           STATUS="Success"
-          if[ "${{ jobs.status }}" != "success" ]; then
+          if[ "${{ needs.deploy.result }}" != "success" ]; then
             STATUS="Failed"
           fi
 
