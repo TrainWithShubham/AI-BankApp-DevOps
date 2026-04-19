@@ -23,6 +23,8 @@ jobs:
           echo "image-name=sana2026/ai-bankapp-devops" >> $GITHUB_OUTPUT
           echo "short-sha=sha-${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
 
+    
+
   call-reusable-docker:
     needs: [call-reusable-build-test, prepare]
     uses: ./.github/workflows/reusable-docker.yml
@@ -39,3 +41,21 @@ jobs:
       - name: Deploy to production
         run: |
           echo "Deploying image: ${{ needs.prepare.outputs.image-name }}:${{ needs.prepare.outputs.short-sha }} to production"
+
+
+  notify: 
+    needs: [call-reusable-build-test, call-reusable-docker, deploy]
+    runs-on: ubuntu-latest
+    if: always() # Run this job regardless of previous job outcomes
+    steps:
+      - name: Send Slack notification
+        run: |
+          STATUS="Success"
+          if[ "${{ jobs.status }}" != "success" ]; then
+            STATUS="Failed"
+          fi
+
+          curl -X POST -H 'Content-type: application/json' --data "{
+            \"text\":\"🚀 Main Pipeline\nStatus: $STATUS\nBranch: ${{ github.ref_name }}\"
+          }" \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
