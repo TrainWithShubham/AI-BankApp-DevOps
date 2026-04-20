@@ -1,0 +1,15 @@
+kind: Pod
+apiVersion: v1
+
+metadata:
+  name : bankapp
+  namespace: bankapp
+
+spec: 
+    containers:
+      - name: bankapp
+        image: santoshpathak7456/ai-bankapp-devops_bankapp:latest
+        ports:
+          - containerPort: 80
+
+  
