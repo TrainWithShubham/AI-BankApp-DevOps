@@ -1,0 +1,21 @@
+# Standalone BankApp pod for learning kubectl commands
+# Assumes MySQL and Ollama are already running
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bankapp-pod
+  namespace: bankapp
+  labels:
+    app: bankapp
+spec:
+  containers:
+    - name: bankapp
+      image: trainwithshubham/bankapp:k8s
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 8080
+      envFrom:
+        - configMapRef:
+            name: bankapp-config
+        - secretRef:
+            name: bankapp-secret
