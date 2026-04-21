@@ -4,6 +4,12 @@ on:
     branches: [start]
     types: ['opened', 'synchronize']
 
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: read
+
+
 jobs:
    call-reusable-build-test:
       uses: ./.github/workflows/reusable-build-test.yml
