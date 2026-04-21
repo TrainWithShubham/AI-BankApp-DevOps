@@ -1,0 +1,14 @@
+
+apiVersion: v1
+kind: Service
+# type: ClusterIP # optional to write this line because by default every cluster  type is ClusterIP
+metadata:
+  name: mysql-service
+  namespace: bankapp
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
