@@ -20,6 +20,7 @@ spec:
           image: mysql:8.0
           ports:
             - containerPort: 3306
+
           env:
             - name: MYSQL_DATABASE
               valueFrom:
@@ -32,3 +33,18 @@ spec:
                 secretKeyRef:
                   name: bankapp-secret
                   key: MYSQL_ROOT_PASSWORD
+
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+
+          readinessProbe:
+            exec:
+              command: ["mysqladmin", "ping", "-h", "127.0.0.1"]
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
