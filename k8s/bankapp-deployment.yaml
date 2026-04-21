@@ -36,8 +36,8 @@ spec:
           image: santoshpathak7456/ai-bankapp-devops_bankapp:k8s
           # Container exposed ports list.
           ports:
-            # App HTTP traffic ke liye container port 80 expose karta hai.
-            - containerPort: 80
+            # Spring Boot default HTTP port 8080 par listen karta hai.
+            - containerPort: 8080
           # Runtime environment variables inject karne ka section.
           env:
             # App ka target database naam.
@@ -74,10 +74,38 @@ spec:
                   # User key fetch hoti hai.
                   key: MYSQL_USER
             # Root password sensitive hai isliye Secret se inject hota hai.
-            - name: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   # Secret resource ka naam.
                   name: bankapp-secret
-                  # Secret key jisme password stored hai.
-                  key: MYSQL_ROOT_PASSWORD
+                  # App DB password secret key.
+                  key: MYSQL_PASSWORD
+            # Ollama endpoint centralized config se inject hota hai.
+            - name: OLLAMA_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: bankapp-config-map
+                  key: OLLAMA_URL
+          # HPA ko work karane ke liye CPU/memory requests required hote hain.
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          # Pod ready tab mark ho jab actuator health pass kare.
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          # Liveness check unhealthy pod ko restart karne me help karti hai.
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 20
