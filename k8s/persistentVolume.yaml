@@ -1,0 +1,28 @@
+# `apiVersion` core storage resources ke liye v1 batata hai.
+apiVersion: v1
+# `kind` se declare hota hai ki yeh cluster-level PersistentVolume hai.
+kind: PersistentVolume
+# `metadata` PV ka identifier aur labels define karta hai.
+metadata:
+  # `name` PV ka unique naam hai jise PVC indirectly bind karega.
+  name: mysql-pv
+  # `labels` selector-based binding/organization ke liye helpful hote hain.
+  labels:
+    # `app: mysql` label PVC selector ke sath match karne ke kaam aata hai.
+    app: mysql
+# `spec` actual storage behavior aur capacity define karta hai.
+spec:
+  # `storageClassName` manual provisioning scenario ko indicate karta hai.
+  storageClassName: manual
+  # `capacity` total available disk size define karti hai.
+  capacity:
+    # 5Gi ka persistent storage MySQL data files ke liye reserve hota hai.
+    storage: 5Gi
+  # `accessModes` se batta hai volume kitne tarike se mount ho sakta hai.
+  accessModes:
+    # `ReadWriteOnce` ek node pe read-write mount ke liye common DB mode hai.
+    - ReadWriteOnce
+  # `hostPath` local node filesystem ka path use karta hai (dev/test friendly).
+  hostPath:
+    # Node par actual directory jaha DB ka data persist hoga.
+    path: /mnt/data/mysqldb
