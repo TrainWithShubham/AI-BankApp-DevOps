@@ -1,16 +1,28 @@
-# Persistent Volume Claim
+# `apiVersion` PVC ke liye core v1 API ko indicate karta hai.
 apiVersion: v1
+# `kind` yeh resource ko PersistentVolumeClaim banata hai.
 kind: PersistentVolumeClaim
+# `metadata` claim ka name aur namespace scope set karta hai.
 metadata:
+  # `name` claim identifier hai jise pods volume mount ke liye refer karte hain.
   name: mysql-pvc
+  # `namespace` claim ko bankapp namespace me constrain karta hai.
   namespace: bankapp
+# `spec` me requested storage properties define hoti hain.
 spec:
+  # `accessModes` desired mount behavior batata hai.
   accessModes:
+    # `ReadWriteOnce` DB workloads ke liye safe/common option hai.
     - ReadWriteOnce
+  # `storageClassName` ko PV ke class se match hona chahiye.
   storageClassName: manual
+  # `resources` claim ko required minimum storage amount batata hai.
   resources:
     requests:
+      # 5Gi storage claim karke MySQL ko persistent disk milti hai.
       storage: 5Gi
+  # `selector` specific labeled PV se bind karne ke liye use hota hai.
   selector:
     matchLabels:
+      # Yeh label `persistentVolume.yaml` ke `app: mysql` se match karta hai.
       app: mysql

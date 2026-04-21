@@ -1,15 +1,22 @@
-kind: Pod
+# `apiVersion` core Pod resource ke liye v1 set hota hai.
 apiVersion: v1
-
+# `kind` se pata chalta hai ki yeh direct Pod manifest hai.
+kind: Pod
+# `metadata` pod ki identity aur scope define karta hai.
 metadata:
-  name : bankapp
+  # Pod ka naam; generally debug/testing single pod use-case me helpful.
+  name: bankapp
+  # Pod ko bankapp namespace me schedule karta hai.
   namespace: bankapp
-
-spec: 
-    containers:
-      - name: bankapp
-        image: santoshpathak7456/ai-bankapp-devops_bankapp:latest
-        ports:
-          - containerPort: 80
-
-  
+# `spec` pod ke runtime details define karta hai.
+spec:
+  # `containers` pod ke andar run hone wale containers ki list hai.
+  containers:
+    # Bank application container ka logical naam.
+    - name: bankapp
+      # App image with `latest` tag; dev me quick iteration ke liye use hota hai.
+      image: santoshpathak7456/ai-bankapp-devops_bankapp:latest
+      # Container ke exposed network ports.
+      ports:
+        # HTTP traffic receive karne ke liye container port 80.
+        - containerPort: 80

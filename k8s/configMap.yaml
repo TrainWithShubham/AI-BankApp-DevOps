@@ -1,8 +1,22 @@
+# `apiVersion` batata hai ki ConfigMap core v1 API me defined hai.
 apiVersion: v1
+# `kind` se pata chalta hai yeh ConfigMap resource hai.
 kind: ConfigMap
+# `metadata` resource ka naam aur namespace jaisi identity values rakhta hai.
 metadata:
+  # `name` ConfigMap ka unique naam hai jisse pods config fetch karenge.
   name: bankapp-config-map
+  # `namespace` ensure karta hai ki config `bankapp` namespace ke andar hi rahe.
   namespace: bankapp
+# `data` ke andar plain-text key-value configuration store hoti hai.
 data:
-  # property-like keys
+  # App ka MySQL database naam; startup pe app isi DB se connect karegi.
   MYSQL_DATABASE: bankappdb
+  # MySQL service DNS name; pod se DB reach karne ka standard tareeqa.
+  MYSQL_HOST: mysql-service
+  # MySQL port string form me; env var parsing issues avoid karne ke liye quoted.
+  MYSQL_PORT: "3306"
+  # DB user name; local/dev setups me often root use hota hai.
+  MYSQL_USER: root
+  # Ollama service endpoint; app LLM calls ke liye is URL ko use karegi.
+  OLLAMA_URL: http://ollama-service:11434

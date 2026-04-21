@@ -1,50 +1,81 @@
+# `apiVersion` Deployment resource ke liye apps/v1 use hota hai.
 apiVersion: apps/v1
+# `kind` batata hai ki yeh workload Deployment ke through manage hoga.
 kind: Deployment
+# `metadata` deployment ki identity aur grouping details rakhta hai.
 metadata:
+  # Deployment ka unique naam; rollout aur updates is naam se track honge.
   name: mysql-deployment
+  # Resource ko bankapp namespace me deploy karta hai.
   namespace: bankapp
+  # `labels` organization aur selector matching ke liye useful metadata hai.
   labels:
+    # MySQL related resources ko logically group karne ka label.
     app: mysql
+# `spec` desired state define karta hai jo controller maintain karega.
 spec:
+  # Single MySQL instance chahiye, isliye replicas 1 rakha gaya hai.
   replicas: 1
+  # `selector` deployment ke managed pods identify karta hai.
   selector:
     matchLabels:
+      # Yeh label pod template labels se exact match hona zaroori hai.
       app: mysql
+  # `template` naya pod create hone par uska blueprint hota hai.
   template:
     metadata:
       labels:
+        # Service aur deployment selector dono isi label par rely karte hain.
         app: mysql
     spec:
+      # `containers` list me pod ke andar chalne wale containers define hote hain.
       containers:
+        # MySQL container definition start hoti hai.
         - name: mysql
+          # Official MySQL 8.0 image use karke DB run karaya ja raha hai.
           image: mysql:8.0
+          # `ports` container ke exposed network port ko describe karta hai.
           ports:
+            # MySQL default TCP port.
             - containerPort: 3306
-
+          # `env` runtime environment variables inject karta hai.
           env:
+            # DB name variable app/db initialization ke liye.
             - name: MYSQL_DATABASE
               valueFrom:
+                # ConfigMap se non-sensitive config pull karna best practice hai.
                 configMapKeyRef:
+                  # Source ConfigMap ka naam.
                   name: bankapp-config-map
+                  # ConfigMap key jiska value env me jayega.
                   key: MYSQL_DATABASE
-
+            # Root password sensitive hai, isliye Secret se liya gaya hai.
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
+                  # Source Secret ka naam.
                   name: bankapp-secret
+                  # Secret key jiska decoded value env variable banega.
                   key: MYSQL_ROOT_PASSWORD
-
+          # `volumeMounts` persistent storage ko container path par attach karta hai.
           volumeMounts:
+            # Mount config volume name se volumes section se map hoti hai.
             - name: mysql-storage
+              # MySQL data directory; restart ke baad data survive karega.
               mountPath: /var/lib/mysql
-
+          # `readinessProbe` check karti hai pod traffic lene ke liye ready hai ya nahi.
           readinessProbe:
             exec:
+              # Command successful hua to pod ready mark hota hai.
               command: ["mysqladmin", "ping", "-h", "127.0.0.1"]
+            # Start ke baad pehla readiness check 15 sec baad chalega.
             initialDelaySeconds: 15
+            # Har 10 sec me readiness re-check hoti rahegi.
             periodSeconds: 10
-
+      # `volumes` pod level volume sources define karta hai.
       volumes:
+        # Named volume jo container mount karega.
         - name: mysql-storage
           persistentVolumeClaim:
+            # PVC name jisse actual persistent disk bind hoti hai.
             claimName: mysql-pvc

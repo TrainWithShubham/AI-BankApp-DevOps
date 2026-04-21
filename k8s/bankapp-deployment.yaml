@@ -1,0 +1,83 @@
+# `apiVersion` apps/v1 use hota hai deployments manage karne ke liye.
+apiVersion: apps/v1
+# `kind` is object ko Deployment define karta hai.
+kind: Deployment
+# `metadata` deployment ka naam, namespace aur labels rakhta hai.
+metadata:
+  # Bank application deployment ka unique naam.
+  name: bankapp-deployment
+  # App resources ko bankapp namespace me isolate karta hai.
+  namespace: bankapp
+  # `labels` se logical grouping aur selection easy hota hai.
+  labels:
+    # App tier ko identify karne wala label.
+    app: bankapp
+# `spec` desired number of pods aur pod template batata hai.
+spec:
+  # 3 replicas high availability/load sharing ke basic use-case ke liye.
+  replicas: 3
+  # `selector` batata hai deployment kin pods ko own karega.
+  selector:
+    matchLabels:
+      # Ye selector template label se match hona mandatory hai.
+      app: bankapp
+  # `template` naye pods ka exact blueprint provide karta hai.
+  template:
+    metadata:
+      labels:
+        # Service/deployment matching ke liye pod label.
+        app: bankapp
+    spec:
+      # Pod ke containers yahan define hote hain.
+      containers:
+        # Main bankapp container configuration.
+        - name: bankapp
+          # Docker image jisse application run hogi.
+          image: santoshpathak7456/ai-bankapp-devops_bankapp
+          # Container exposed ports list.
+          ports:
+            # App HTTP traffic ke liye container port 80 expose karta hai.
+            - containerPort: 80
+          # Runtime environment variables inject karne ka section.
+          env:
+            # App ka target database naam.
+            - name: MYSQL_DATABASE
+              valueFrom:
+                # Non-secret config ConfigMap se lena safe/maintainable hota hai.
+                configMapKeyRef:
+                  # Source ConfigMap ka naam.
+                  name: bankapp-config-map
+                  # Required key jiska value env var banega.
+                  key: MYSQL_DATABASE
+            # DB host jahan app connect karegi.
+            - name: MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  # Same central ConfigMap reuse karke config centralized rakhi gayi hai.
+                  name: bankapp-config-map
+                  # MySQL service name wali key.
+                  key: MYSQL_HOST
+            # DB port app ko dynamic tarike se dene ke liye env var.
+            - name: MYSQL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  # ConfigMap source name.
+                  name: bankapp-config-map
+                  # Port key value.
+                  key: MYSQL_PORT
+            # DB username jisse app authenticate karegi.
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  # ConfigMap reference for username.
+                  name: bankapp-config-map
+                  # User key fetch hoti hai.
+                  key: MYSQL_USER
+            # Root password sensitive hai isliye Secret se inject hota hai.
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  # Secret resource ka naam.
+                  name: bankapp-secret
+                  # Secret key jisme password stored hai.
+                  key: MYSQL_ROOT_PASSWORD

@@ -1,6 +1,8 @@
+# `apiVersion` batata hai ki yeh object Kubernetes core v1 API use karega.
+apiVersion: v1
+# `kind` se define hota hai ki hum Namespace resource bana rahe hain.
 kind: Namespace
-apiVersion : v1
-metadata :
-  name : bankapp
-
-
+# `metadata` object resource ki basic identity/config rakhta hai.
+metadata:
+  # `name` namespace ka unique naam hai jisme app ke resources isolate honge.
+  name: bankapp

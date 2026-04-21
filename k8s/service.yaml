@@ -1,14 +1,24 @@
-
+# `apiVersion` batata hai ki Service core v1 API ka object hai.
 apiVersion: v1
+# `kind` resource type ko Service declare karta hai.
 kind: Service
-# type: ClusterIP # optional to write this line because by default every cluster  type is ClusterIP
+# `metadata` service ka naam aur namespace details hold karta hai.
 metadata:
+  # `name` internal DNS banata hai (`mysql-service.bankapp.svc`) jisse app DB tak pahuche.
   name: mysql-service
+  # `namespace` service ko bankapp workloads ke saath group karta hai.
   namespace: bankapp
+# `spec` network routing rules define karta hai.
 spec:
+  # `ClusterIP` service ko cluster ke andar private endpoint banata hai.
   type: ClusterIP
+  # `selector` se woh pods choose hote hain jinke paas matching label ho.
   selector:
+    # `app: mysql` label wale pods ko service backend banaya jayega.
     app: mysql
+  # `ports` traffic forwarding ke source aur destination ports define karta hai.
   ports:
+    # Service port jahan se dusre pods MySQL connect karenge.
     - port: 3306
+      # Pod/container ke actual port tak request forward hoti hai.
       targetPort: 3306
