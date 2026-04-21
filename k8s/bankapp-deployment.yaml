@@ -33,7 +33,7 @@ spec:
         # Main bankapp container configuration.
         - name: bankapp
           # Docker image jisse application run hogi.
-          image: santoshpathak7456/ai-bankapp-devops_bankapp
+          image: santoshpathak7456/ai-bankapp-devops_bankapp:k8s
           # Container exposed ports list.
           ports:
             # App HTTP traffic ke liye container port 80 expose karta hai.
