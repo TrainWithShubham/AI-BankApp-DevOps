@@ -33,41 +33,46 @@ jobs:
       image_url: ${{ steps.build.outputs.image_url }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+
 
       - name: login to DockerHub
-        uses: docker/login-action@v4
+        uses: docker/login-action@4a8376e001c7725687f0624d1c3698a3f6ab337e
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build and Push Docker image
+      - name: Build Docker image
         id: build
         run: |
           docker build \
             -t ${{ inputs.image-name }}:latest \
             -t ${{ inputs.image-name }}:${{ inputs.image-tag }} .
 
-          docker push ${{ inputs.image-name }}:latest
-          docker push ${{ inputs.image-name }}:${{ inputs.image-tag }}
 
           echo "image_url=${{ inputs.image-name }}:${{ inputs.image-tag }}" >> $GITHUB_OUTPUT
 
-
-          # 🔐 Trivy Scan Step (DevSecOps)
+          
+      # 🔐 Trivy Scan Step (DevSecOps)
       - name: Scan Docker image with Trivy
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
         with:
           image-ref: ${{ inputs.image-name }}:${{ inputs.image-tag }}
-          format: 'table'
-          output: 'trivy-report.txt'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
           severity: 'CRITICAL'
           exit-code: '1'
 
-      # 📄 Upload Scan Report
-      - name: Upload Trivy Report
-        if: always() 
-        uses: actions/upload-artifact@v4
+      # 📄 Upload to GitHub Security Tab
+      - name: Upload Sarif Report
+        uses: github/codeql-action/upload-sarif@4cbe7bef850a2b9688db7dbe6133a045b3627fcd
         with:
-          name: trivy-report
-          path: trivy-report.txt
+          sarif_file: trivy-results.sarif
+
+      # Push Docker image to DockerHub    
+      - name: Push Docker image
+        run: |  
+          docker push ${{ inputs.image-name }}:latest
+          if [ "${{ inputs.image-tag }}" != "latest" ]; then
+            docker push ${{ inputs.image-name }}:${{ inputs.image-tag }}
+          fi
