@@ -6,6 +6,8 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   name: bankapp-hpa
   namespace: bankapp
 spec:
