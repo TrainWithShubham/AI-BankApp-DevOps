@@ -4,6 +4,7 @@ metadata:
   name: bankapp-config
   namespace: bankapp
 data:
+  APP_NAME: BankApp-Manual-Test
   MYSQL_HOST: mysql-service
   MYSQL_PORT: "3306"
   MYSQL_DATABASE: bankappdb
