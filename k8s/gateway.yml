@@ -1,13 +1,12 @@
 # Requires: Gateway API CRDs + Envoy Gateway installed on the cluster
 # On EKS, Envoy Gateway creates an AWS NLB for external access automatically.
 
-# COMMENTED: GatewayClass (Envoy already creates it)
-# apiVersion: gateway.networking.k8s.io/v1
-# kind: GatewayClass
-# metadata:
-#   name: envoy-gateway
-# spec:
-#   controllerName: gateway.envoyproxy.io/gatewayclass-controller
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoy-gateway
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
 
 ---
 apiVersion: gateway.networking.k8s.io/v1
