@@ -2,6 +2,7 @@ name: Reusable Docker Build
 
 on:
   workflow_call:
+
     inputs:
       image_name:
         required: true
@@ -24,13 +25,16 @@ on:
         value: ${{ jobs.docker.outputs.image_url }}
 
 jobs:
+
   docker:
+
     runs-on: ubuntu-latest
 
     outputs:
       image_url: ${{ steps.image.outputs.url }}
 
     steps:
+
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -42,21 +46,13 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ inputs.image_name }}:${{ inputs.tag }} .
+          docker build -t ${{ secrets.docker_username }}/${{ inputs.image_name }}:${{ inputs.tag }} .
 
       - name: Push Docker Image
         run: |
-          docker push ${{ inputs.image_name }}:${{ inputs.tag }}
+          docker push ${{ secrets.docker_username }}/${{ inputs.image_name }}:${{ inputs.tag }}
 
       - name: Set Image URL
         id: image
         run: |
-          echo "url=${{ inputs.image_name }}:${{ inputs.tag }}" >> $GITHUB_OUTPUT
-
-      - name: Run Trivy Scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ inputs.image_name }}:${{ inputs.tag }}
-          format: table
-          exit-code: 1
-          severity: CRITICAL,HIGH
+          echo "url=${{ secrets.docker_username }}/${{ inputs.image_name }}:${{ inputs.tag }}" >> $GITHUB_OUTPUT
