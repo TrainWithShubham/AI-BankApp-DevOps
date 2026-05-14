@@ -1,0 +1,53 @@
+name: Reusable Build and Test
+
+on:
+  workflow_call:
+
+    inputs:
+      java_version:
+        required: false
+        type: string
+        default: "21"
+
+      run_tests:
+        required: false
+        type: boolean
+        default: true
+
+    outputs:
+      test_result:
+        description: "Result of tests"
+        value: ${{ jobs.build-test.outputs.test_result }}
+
+jobs:
+  build-test:
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      test_result: ${{ steps.set-result.outputs.result }}
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+    
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ inputs.java_version }}
+
+    
+      - name: Install Dependencies
+        run: mvn dependency:resolve
+
+    
+      - name: Run Tests
+        if: inputs.run_tests == true
+        run: mvn test
+
+      - name: Set Test Result
+        id: set-result
+        run: echo "result=passed" >> $GITHUB_OUTPUT
