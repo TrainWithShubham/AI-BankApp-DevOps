@@ -1,4 +1,4 @@
-iname: PR Pipeline
+name: PR Pipeline
 
 on:
   pull_request:
