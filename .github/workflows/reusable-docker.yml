@@ -52,3 +52,11 @@ jobs:
         id: image
         run: |
           echo "url=${{ inputs.image_name }}:${{ inputs.tag }}" >> $GITHUB_OUTPUT
+
+      - name: Run Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ inputs.image_name }}:${{ inputs.tag }}
+          format: table
+          exit-code: 1
+          severity: CRITICAL,HIGH
