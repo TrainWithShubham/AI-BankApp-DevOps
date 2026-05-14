@@ -1,0 +1,76 @@
+name: Health Check
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'
+
+  workflow_dispatch:
+
+jobs:
+  health-check:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Step 1 - Pull Latest Docker Image
+      - name: Pull Docker Image
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/ai-bankapp:latest
+
+      # Step 2 - Create Docker Network
+      - name: Create Docker Network
+        run: |
+          docker network create bankapp-network
+
+      # Step 3 - Run MySQL Container
+      - name: Run MySQL Container
+        run: |
+          docker run -d \
+            --name mysql \
+            --network bankapp-network \
+            -e MYSQL_ROOT_PASSWORD=root \
+            -e MYSQL_DATABASE=bankappdb \
+            -p 3306:3306 \
+            mysql:8
+
+      # Step 4 - Wait for MySQL
+      - name: Wait for MySQL
+        run: sleep 25
+
+      # Step 5 - Run BankApp Container
+      - name: Run BankApp Container
+        run: |
+          docker run -d \
+            --name bankapp \
+            --network bankapp-network \
+            -p 8080:8080 \
+            -e MYSQL_HOST=mysql \
+            -e MYSQL_PORT=3306 \
+            -e MYSQL_DATABASE=bankappdb \
+            -e MYSQL_USER=root \
+            -e MYSQL_PASSWORD=root \
+            ${{ secrets.DOCKER_USERNAME }}/ai-bankapp:latest
+
+      # Step 6 - Wait for Application Startup
+      - name: Wait for Application
+        run: sleep 30
+
+      # Step 7 - Health Check
+      - name: Health Check
+        run: |
+          curl http://localhost:8080 || exit 1
+
+      # Step 8 - Add Workflow Summary
+      - name: Add Summary
+        run: |
+          echo "## Health Check Report" >> $GITHUB_STEP_SUMMARY
+          echo "- Image: ai-bankapp:latest" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: PASSED" >> $GITHUB_STEP_SUMMARY
+          echo "- Time: $(date)" >> $GITHUB_STEP_SUMMARY
+
+      # Step 9 - Cleanup Containers
+      - name: Cleanup Containers
+        run: |
+          docker stop bankapp mysql
+          docker rm bankapp mysql
