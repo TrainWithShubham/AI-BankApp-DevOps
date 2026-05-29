@@ -1,0 +1,32 @@
+kind: Service
+apiVersion: v1
+
+metadata: 
+  name: mysql-service
+  namespace: bankapp
+
+spec:
+  selector:
+    app: mysql
+  ports:
+    - port: 3306  
+
+---
+
+kind: Service
+apiVersion: v1
+
+metadata:
+  name: bankapp-service
+  namespace: bankapp
+
+spec:
+  selector:
+    app: bankapp
+  ports:
+    - port: 8080
+      targetPort: 8080  
+      nodePort: 30005
+      
+  type: NodePort
+
