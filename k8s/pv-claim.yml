@@ -4,12 +4,28 @@ metadata:
   name: mysql-pvc
   namespace: bankapp
 spec:
+  storageClassName: manual
   accessModes:
     - ReadWriteOnce
-  storageClassName: manual
   resources:
     requests:
       storage: 5Gi
   selector:
     matchLabels:
       app: mysql
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ollama-pvc
+  namespace: bankapp
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      app: ollama

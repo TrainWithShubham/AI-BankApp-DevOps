@@ -5,16 +5,14 @@ metadata:
   labels:
     app: mysql
 spec:
+  storageClassName: manual
   capacity:
     storage: 5Gi
   accessModes:
     - ReadWriteOnce
-  storageClassName: manual
   hostPath:
     path: /mnt/data/mysql
 ---
-
-
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -22,11 +20,10 @@ metadata:
   labels:
     app: ollama
 spec:
+  storageClassName: manual
   capacity:
-    storage: 5Gi  
+    storage: 5Gi
   accessModes:
     - ReadWriteOnce
-  storageClassName: manual
   hostPath:
-    path: /mnt/data/ollama  
-
+    path: /mnt/data/ollama
