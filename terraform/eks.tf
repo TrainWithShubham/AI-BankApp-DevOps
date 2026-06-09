@@ -50,7 +50,7 @@ module "eks" {
     bankapp-ng = {
       instance_types = [var.node_instance_type]
       desired_size   = var.node_desired_count
-      min_size       = var.node_desired_count
+      min_size       = var.node_min_count
       max_size       = var.node_max_count
 
       tags = {
