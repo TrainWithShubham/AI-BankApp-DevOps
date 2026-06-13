@@ -1,16 +1,25 @@
-# EKS uses dynamic provisioning via EBS CSI Driver.
-# No manual PersistentVolumes needed — PVCs reference the StorageClass directly.
-# This file defines the gp3 StorageClass for EKS.
-# NOTE: Not set as default to avoid conflict with EKS built-in gp2 default.
-# PVCs explicitly reference storageClassName: gp3
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: gp3
-provisioner: ebs.csi.aws.com
-parameters:
-  type: gp3
-  fsType: ext4
-reclaimPolicy: Delete
-volumeBindingMode: WaitForFirstConsumer
-allowVolumeExpansion: true
+  name: mysql-pvc
+  namespace: bankapp
+spec:
+  storageClassName: gp3
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ollama-pvc
+  namespace: bankapp
+spec:
+  storageClassName: gp3
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
