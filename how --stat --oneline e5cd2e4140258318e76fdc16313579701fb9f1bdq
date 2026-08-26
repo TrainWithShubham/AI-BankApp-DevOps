@@ -1,0 +1,568 @@
+[33mcommit e5cd2e4140258318e76fdc16313579701fb9f1bd[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Wed Aug 26 21:26:34 2026 +0530
+
+    Updated build.yml
+
+[33mcommit e6a2363083fe3ad33264110266de21f17f857528[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Wed Aug 26 21:20:18 2026 +0530
+
+    Updated build workflow
+
+[33mcommit ce04d2081d3704bf88c80e18a19bc5efc62b50a4[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Wed Aug 26 21:16:35 2026 +0530
+
+    Updated build workflow
+
+[33mcommit bba22435dfbb4b44362a42e492f71c9158ac40b4[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Tue Aug 25 21:50:36 2026 +0530
+
+    Final Commit
+
+[33mcommit 4f751f759fff7a687e18264fb31fd8bbaba366f1[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Tue Aug 25 20:54:40 2026 +0530
+
+    Final Commit
+
+[33mcommit f6e3b61bb8062adf40b95a2e4e279d0e42a06ad3[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Tue Aug 25 19:02:21 2026 +0530
+
+    Final Commit
+
+[33mcommit a52862406ed3691ae11b0002712413a3b84ad374[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 21:32:31 2026 +0530
+
+    Final Commit
+
+[33mcommit c94bf978f714278b1609f38bbd94e59eeec3a7cd[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 21:26:12 2026 +0530
+
+    Final Commit
+
+[33mcommit f03355b989e10a3f989b3b8c22a471bef8c4e141[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 21:05:48 2026 +0530
+
+    Final Commit
+
+[33mcommit 8fbace9b3f671461ac9d44b6f6a08dfd55d0809a[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 20:53:29 2026 +0530
+
+    Final Commit
+
+[33mcommit cf7c7eec994e51b2a487c8f43ef6191ec4b9c555[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 20:47:19 2026 +0530
+
+    Final Commit
+
+[33mcommit fe17d2d50e9ad4dcd727dd00a1f2e2e2219ba06e[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 20:30:47 2026 +0530
+
+    Final Commit
+
+[33mcommit fa319adfca3484ee59f2f8e2b3a1accfca3a9519[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 16:51:03 2026 +0530
+
+    First Commit
+
+[33mcommit ab96060ae4c53c5c668417abe215c2e5a2cd15c0[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 16:29:13 2026 +0530
+
+    First Commit
+
+[33mcommit 15a4c6780cc4fe5ddaef2c9a9b68b4ad51c4f2b6[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 15:57:19 2026 +0530
+
+    First Commit
+
+[33mcommit 037af90b59638944fd1c2d0cd67f4f9bf5944c43[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 15:42:18 2026 +0530
+
+    First Commit
+
+[33mcommit d2950e3fc8e2c389bddc321bb71ff595c14dcf15[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 15:16:22 2026 +0530
+
+    First Commit
+
+[33mcommit 2e0dbf47d3d9911983b490b43a32883079a005f4[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 14:59:45 2026 +0530
+
+    First Commit
+
+[33mcommit 373c1f836b7105720cf814c7d3e856d293e381ed[m
+Author: Rahul <cloudops.rahul@gmail.com>
+Date:   Sun Aug 23 14:33:46 2026 +0530
+
+    First Commit
+
+[33mcommit ff08f91303a547fffc7d8be089933144ab38a292[m
+Merge: 99bcb7c 9b76c8a
+Author: Shubham Londhe <shubhamnath5@gmail.com>
+Date:   Mon Mar 16 07:03:21 2026 +0530
+
+    Merge pull request #11 from Amitabh-DevOps/k8s
+    
+    DevSecOps Bankapp
+
+[33mcommit 9b76c8af6c88a009e7e0dd21684e7ec33408ac36[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Sun Mar 15 18:17:55 2026 +0530
+
+    updated
+
+[33mcommit 7aafe867ad723929307d2818639d3180564de96a[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Sun Mar 15 18:09:44 2026 +0530
+
+    updated
+
+[33mcommit a59afe608daa4f97bb67efe11eea8abf62440dac[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Sun Mar 15 18:05:17 2026 +0530
+
+    updated
+
+[33mcommit 9914d92907e71fb4e8eebf8beb7cfe321b9ccc90[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Sun Mar 15 18:01:23 2026 +0530
+
+    reverted UI test change
+
+[33mcommit ca035047dd81bb22ec7d082310a93397913f4a5b[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Sun Mar 15 17:52:21 2026 +0530
+
+    test: modify dashboard UI for pipeline verification
+
+[33mcommit 6bf4d562c45bf0da6c4a7a3dbc5d208ad5e20ee3[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Sun Mar 15 17:51:18 2026 +0530
+
+    updated
+
+[33mcommit b867eae32bc09d56d2c224ca6bc2546c127a5267[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Sun Mar 15 17:37:14 2026 +0530
+
+    updated
+
+[33mcommit 603f312bbb720e576c3879f847a4e77376a62fae[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Sun Mar 15 17:26:11 2026 +0530
+
+    test commit
+
+[33mcommit e9cfd8e56d610f6e52fe9810bc14cf34f9a979c4[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Sun Mar 15 17:25:37 2026 +0530
+
+    test commit
+
+[33mcommit 25af280ddc891b71aa645a1ccf4ff31c373a8c63[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Sun Mar 15 17:10:18 2026 +0530
+
+    RDS to mysql container
+
+[33mcommit 0d7453a4daa1b2991c2e2ab309f0e180eedaa428[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 22:06:11 2026 +0530
+
+    updated
+
+[33mcommit 540652ab2404f345c8bf1edc604338c32cbe1d54[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 21:55:12 2026 +0530
+
+    security: expand pipeline to 9 gates with Gitleaks and Checkstyle integration
+
+[33mcommit f33006faa4e936754d5a64e1c9d480e6099bed03[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 21:46:38 2026 +0530
+
+    revert: restore original login page content after successful CI/CD test
+
+[33mcommit 00b0eba3024784a47e50e3285e9ae96fcbc7830a[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 21:40:46 2026 +0530
+
+    test: temporary UI change v2.1 to verify CI/CD flow
+
+[33mcommit d4f291d748823ccef27c9db7edbf0a9bc4a8f052[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 21:36:21 2026 +0530
+
+    updated
+
+[33mcommit 9993f66a5d80d74d7a41df91777f548734545366[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 21:34:43 2026 +0530
+
+    updated
+
+[33mcommit 8acd633a36b65cdf93665d681445ee9c600ccd57[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 21:20:31 2026 +0530
+
+    dast: set ZAP to audit mode to prevent non-blocking header warnings from failing the pipeline
+
+[33mcommit 020532d6d240975f8519f3530ff7e99d7c0dec04[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 21:08:02 2026 +0530
+
+    security: override jackson version and upgrade alpine packages to fix latest Trivy findings
+
+[33mcommit a7d5873756690d6465c5ec8fbb2bd5ab704ced2e[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 20:56:46 2026 +0530
+
+    security: upgrade spring boot and force pull base images to remediate Trivy findings
+
+[33mcommit 0c61bbcf236021ad5b32e6895424d470f5317469[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 20:49:41 2026 +0530
+
+    security: upgrade tomcat to 10.1.52 to fix newly discovered critical CVEs and pass SCA gate
+
+[33mcommit 40277eebd808ae32bc5a1cf549263248c1bb419c[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 20:45:24 2026 +0530
+
+    final: hardened production-grade pipeline with active DAST scanning
+
+[33mcommit 06d7ae50659313dcb16c0a8d136b6c62543b9afe[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 20:30:09 2026 +0530
+
+    fix: upgrade ZAP action to v0.15.0 and simplify artifact naming
+
+[33mcommit bb5f4d2d4051f8ea7eaa24f9dc9c5bf50729dece[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 20:20:52 2026 +0530
+
+    security: transition to reusable workflows to fix Semgrep Pwn-Request finding
+
+[33mcommit 16d537082a7be5bf5fc45cba963a7f612eaabe34[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 20:13:56 2026 +0530
+
+    separated devsecops into different yml
+
+[33mcommit 393321c5a9c3e7faca74cf83366feb2dbc978f93[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 20:07:14 2026 +0530
+
+    updated
+
+[33mcommit 649ebf71be8494d0beb32d4769a963339050580d[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 19:17:01 2026 +0530
+
+    fix: set trivy to audit mode (exit-code 0) while baseline is reviewed
+
+[33mcommit b38e5b84dca28aaaa305243b7dbfc5f8a3c40e51[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 19:10:14 2026 +0530
+
+    fix: pin tomcat to 10.1.40 for CVE remediation, suppress log4j-api false positive
+
+[33mcommit 06a916b8d8c3fcb22edc5e7016783e2f27c88132[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 19:04:49 2026 +0530
+
+    fix: use alpine-compatible addgroup/adduser in Dockerfile
+
+[33mcommit 21a8cf06f79bed528cf02cf1f49381058cb1d8e7[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 18:58:04 2026 +0530
+
+    fix: switch to alpine base image to resolve Trivy CRITICAL CVEs
+
+[33mcommit 387ad8b7d81d775b07fdeeb0ac6835ee8d178b16[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 17:39:12 2026 +0530
+
+    updated
+
+[33mcommit 99655ebe7bea30b135920a843fa268ea81fa46cb[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 17:29:53 2026 +0530
+
+    updated
+
+[33mcommit cdd6d1c8516dab9a0256bca8226af308938e08e9[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 17:28:16 2026 +0530
+
+    updated
+
+[33mcommit 9a966ef08789daec4dc3a7e4dc453e8d74b35783[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 17:27:36 2026 +0530
+
+    updated
+
+[33mcommit 50d48345eae5d79a5eddfeba024cfd8246303944[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 17:26:13 2026 +0530
+
+    perf: add NVD API key and caching to OWASP SCA job
+
+[33mcommit c60e5ee1cbf569b0ee99a647b84e1e762e4b5ad2[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 17:04:40 2026 +0530
+
+    fix: remove semgrep-triggering comment, update CI/CD docs
+
+[33mcommit 8cc686084d10e087e8693e7a7b6d1926cff16258[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 16:36:48 2026 +0530
+
+    fix: remove commented actuator line causing Semgrep false match
+
+[33mcommit 0b9e2ac4c5da7f333c8bc871777183c29d243ef0[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 16:30:23 2026 +0530
+
+    fix: restrict actuator endpoints to resolve SAST finding
+
+[33mcommit 6831f02573931990437eb561068ba84951be81e7[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 16:24:58 2026 +0530
+
+    feat: implement full DevSecOps golden pipeline
+
+[33mcommit 90c932d5d63902bea5ae5bbb0f26953d22f9c831[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 12:29:26 2026 +0530
+
+    updated
+
+[33mcommit 57f73d035767ee10275c92ab3e5184ae3fdc3bb1[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 12:27:29 2026 +0530
+
+    updated
+
+[33mcommit 53a1b041ed753cf2877ce1376d2e0a444d3146d1[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 12:26:46 2026 +0530
+
+    updated
+
+[33mcommit 8c33033b3b9a9611657fb8f8989dcba80de4afb4[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 12:25:47 2026 +0530
+
+    updated
+
+[33mcommit 23975622ac26cf439bd770bf5100016534599a80[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 12:23:35 2026 +0530
+
+    updated
+
+[33mcommit efe9413dd2a77df985ef7ebf8a17efd35264bdf0[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 12:15:39 2026 +0530
+
+    updated readme, added path-ignore for screenshots
+
+[33mcommit b65194091323ee000236247e34f827eb30f584b8[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 10:59:07 2026 +0530
+
+    updated
+
+[33mcommit baf21a9bb178ae95fccb8127bc4b36322b4e99aa[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 10:55:19 2026 +0530
+
+    updated
+
+[33mcommit cfe825f17418de411d95feb452b7cf8192592418[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 10:31:57 2026 +0530
+
+    updated readme, added path-ignore in github action
+
+[33mcommit c93ba87f5b65232cc0bad6cb2a11c6337452cfb4[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 10:00:39 2026 +0530
+
+    exported HOME
+
+[33mcommit f0a8d5183f9575622d1a46032aad97151ba3d78e[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 09:51:52 2026 +0530
+
+    updated script
+
+[33mcommit 40e0d03721d57f5ef265dde541431b593315bb40[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 09:35:21 2026 +0530
+
+    updated
+
+[33mcommit 97f4adb5c71db122a95de41bf61f5bec863b816a[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Tue Mar 3 09:05:49 2026 +0530
+
+    updated
+
+[33mcommit 0bb59fed3e589188f18035a18d8b51fdeefbdc04[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 21:50:42 2026 +0530
+
+    updated
+
+[33mcommit f481bbf4cbe69b1608dfd628e27e4a81e2928b6e[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 21:37:10 2026 +0530
+
+    updated readme, added ollama ec2 userdata
+
+[33mcommit 247b95c2cbf4aa558f905d82d1fab80f5491cf11[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 19:46:31 2026 +0530
+
+    added devsecops.yml and app-tier.yml
+
+[33mcommit 8becdd7f8eeb3f65ec2de3fd6510934e30bc2295[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 18:04:14 2026 +0530
+
+    updated
+
+[33mcommit 0d75432b461598c6d6609e78c93cc0052dc76d91[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 18:03:23 2026 +0530
+
+    updated
+
+[33mcommit 9ce646d6c8d0c3b64c15e78581fb38418a7bfb4e[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 18:00:49 2026 +0530
+
+    updated
+
+[33mcommit 3b4708e3fc2ca67578f605e0257ebffdde3ed2c8[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 18:00:16 2026 +0530
+
+    updated
+
+[33mcommit ce003b04b235afe15f5b10681d418ab7a0577c5e[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 17:38:13 2026 +0530
+
+    added devsecops.yml and deleted dockermultistage
+
+[33mcommit b632a936d0e0e44b78e7e518b2a2aa08e6ad9d18[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 12:52:48 2026 +0530
+
+    updated
+
+[33mcommit 5e966fcd6cbb0c7d82cd3b0806223e6231318b46[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 12:14:22 2026 +0530
+
+    updated UI
+
+[33mcommit cf16af705f2aeece8395a67a8bfca1d5aaed927d[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 12:00:26 2026 +0530
+
+    added ollama pull model
+
+[33mcommit 1114e542fe06d642fd39eb688ecfe0f8f5b7bad5[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 11:57:56 2026 +0530
+
+    added ollama pull model
+
+[33mcommit d5fc4689f65ddf403b8c9939c41094d1ee3f79f6[m
+Author: Amitabh soni <amitabhdevops2024@gmail.com>
+Date:   Mon Mar 2 10:51:27 2026 +0530
+
+    updated Readme & added MIT
+
+[33mcommit 99bcb7c20b0e3c9aaca71c0173b718442e04b7b3[m
+Author: LondheShubham153 <shubhamnath5@gmail.com>
+Date:   Sun Feb 22 21:27:41 2026 +0530
+
+    Remove CLAUDE.md from repo, keep local only
+
+[33mcommit fdb1d51df6cb9a4dd0127696b03fab43acc788f0[m
+Author: LondheShubham153 <shubhamnath5@gmail.com>
+Date:   Sun Feb 22 21:20:15 2026 +0530
+
+    Fix logout button to use POST and clean up remote config
+
+[33mcommit a51817387d52daceff7f32853d1eb07d945091e6[m
+Author: LondheShubham153 <shubhamnath5@gmail.com>
+Date:   Sun Feb 22 08:17:28 2026 +0530
+
+    Add README and merge AI chatbot into docker branch
+
+[33mcommit 539253cc7eab832fc9693076f7b39ea5abe1f51d[m
+Author: LondheShubham153 <shubhamnath5@gmail.com>
+Date:   Sun Feb 22 01:04:08 2026 +0530
+
+    Add AI chatbot powered by Ollama (self-hosted, zero cost)
+    
+    - Add ChatService calling Ollama API with account context
+    - Add ChatController REST endpoint (POST /api/chat)
+    - Add Ollama container to docker-compose
+    - Add floating chat widget on dashboard with glassmorphism UI
+    - CSRF meta tags in layout for AJAX calls
+    - Update ROADMAP.md with AI phase checked off
+
+[33mcommit ad78c96fc4d61c7f1530560abbaa82e2611d91cf[m
+Author: LondheShubham153 <shubhamnath5@gmail.com>
+Date:   Sun Feb 22 01:03:08 2026 +0530
+
+    Add complete backend, modernized frontend, Docker setup
+    
+    - Upgrade Spring Boot 3.4.1, Java 21, modern MySQL connector
+    - Add Spring Security, JPA entities, service layer, controllers
+    - Redesign all templates with Bootstrap 5, glassmorphism, dark/light theme
+    - Add Dockerfile, Dockerfile.multistage, docker-compose.yml
+    - Add actuator, Prometheus metrics, virtual threads
+    - Add ROADMAP.md for DevOps progression
+
+[33mcommit 1960b4c362a79fae3cbd184c0990b0b0a2849ee3[m
+Author: goldencat <codingwithgoldencat@gmail.com>
+Date:   Mon Aug 26 16:50:52 2024 +0530
+
+    updated transactions view to show correct color in start
+
+[33mcommit 9c8cebbb5fecec28147c85a4d0a2e63d14f19861[m
+Author: goldencat <codingwithgoldencat@gmail.com>
+Date:   Mon Aug 26 15:17:49 2024 +0530
+
+    skeleton project
+
+[33mcommit e6208f758c53b0391e848bb3aa24e1e25d24e137[m
+Author: goldencat <codingwithgoldencat@gmail.com>
+Date:   Mon Aug 26 15:12:39 2024 +0530
+
+    Initial commit
